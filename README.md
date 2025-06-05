@@ -17,4 +17,4 @@ Mục tiêu bạn sẽ đạt được:
 
 *Duc Truong,*
 
-*BIM Automation Engineer*
+*Developer, BIM Automation Department*

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Name>MyRevitCommands</Name>
+    <Assembly>MyRevitCommands.dll</Assembly>
+    <AddInId>
+      973072FB-3FEB-4A5E-924B-484400328463
+    </AddInId>
+    <FullClassName>MyRevitCommands.GetElementId</FullClassName>
+    <Text>GetElementId</Text>
+    <Description>Get the Id from an element</Description>
+    <VendorId>Jeremy</VendorId>
+    <VendorDescription>@Learndynamo</VendorDescription>
+    <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
+  </AddIn>
+  <AddIn Type="Command">
+    <Name>MyRevitCommands</Name>
+    <Assembly>MyRevitCommands.dll</Assembly>
+    <AddInId>
+      992254E6-FCDF-4158-9C4D-B4E47EE0498F
+    </AddInId>
+    <FullClassName>MyRevitCommands.CollectWindows</FullClassName>
+    <Text>CollectWindows</Text>
+    <Description>Collect windows from a document</Description>
+    <VendorId>Jeremy</VendorId>
+    <VendorDescription>@Learndynamo</VendorDescription>
+    <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
+  </AddIn>
+  <AddIn Type="Command">
+    <Name>MyRevitCommands</Name>
+    <Assembly>MyRevitCommands.dll</Assembly>
+    <AddInId>
+      CD24F7FD-486F-412D-97EE-BC1C58BF35C8
+    </AddInId>
+    <FullClassName>MyRevitCommands.DeleteElement</FullClassName>
+    <Text>DeleteElement</Text>
+    <Description>Deletes an Element from the document</Description>
+    <VendorId>Jeremy</VendorId>
+    <VendorDescription>@Learndynamo</VendorDescription>
+    <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
+  </AddIn>
+</RevitAddIns>
