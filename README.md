@@ -13,7 +13,7 @@ Mục tiêu bạn sẽ đạt được:
 - Tự động hóa các công việc liên quan đến khung nhìn và bảng vẽ.
 - Xây dựng giao diện người dùng đơn giản để điều khiển plugin.
 
-Hãy làm theo hướng dẫn này để sử dụng Revit API, giúp tối ưu hóa công việc thiết kế và triển khai của bộ phận bạn!
+Hướng dẫn cơ bản Revit API, giúp tối ưu hóa công việc thiết kế và triển khai của bộ phận.
 
 *Duc Truong,*
 
