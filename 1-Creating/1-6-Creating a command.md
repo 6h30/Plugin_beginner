@@ -1,4 +1,5 @@
 1.6. Tạo một lệnh Revit  
+
 Sau khi hiểu về giao diện `IExternalCommand`, chúng ta sẽ sử dụng nó để tạo một lệnh trong dự án Visual Studio. Lệnh này sẽ cho phép chọn một phần tử trong Revit (như tường hoặc cột) và lấy ID của nó. Hướng dẫn này tiếp nối từ bước thêm Revit API (phần 1.4). Nếu bạn chưa có dự án, hãy mở tệp dự án từ thư mục bài tập.
 
 **Các bước tạo lệnh**:  

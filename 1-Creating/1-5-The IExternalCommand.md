@@ -1,4 +1,5 @@
 1.5. Giao diện IExternalCommand  
+
 Để tạo lệnh (command) cho plugin Revit, chúng ta sử dụng **IExternalCommand** – một giao diện (interface) trong C# giúp tạo các lệnh bên ngoài (external commands). Lệnh này sẽ xuất hiện trong tab **Add-Ins** của Revit, cho phép truy cập cơ sở dữ liệu Revit và các phần tử được chọn.
 
 **Giao diện (interface) là gì?**  

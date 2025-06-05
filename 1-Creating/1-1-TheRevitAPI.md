@@ -1,5 +1,7 @@
 1. Tạo một plugin đơn giản  
+
 1.1. Giới thiệu Revit API  
+
 Revit API (Giao diện Lập trình Ứng dụng) là công cụ cho phép chúng ta truy cập và tương tác với cơ sở dữ liệu dự án trong Autodesk Revit. API giống như một “nhân viên phục vụ” trong nhà hàng: bạn muốn một món ăn (dữ liệu hoặc hành động từ Revit), nhưng bạn không thể vào bếp (cơ sở dữ liệu Revit). API sẽ nhận yêu cầu của bạn, gửi đến Revit và trả về kết quả, ví dụ như một đối tượng (object) hoặc một hành động cụ thể.
 
 Revit API bao gồm hai tệp chính:  

@@ -1,4 +1,5 @@
 1.2. Xem tài liệu Revit API  
+
 Để hiểu và sử dụng Revit API, bạn cần làm quen với tài liệu hướng dẫn đi kèm. Một cách đơn giản là cài đặt **Revit Software Development Kit (SDK)** khi cài đặt Revit, từ đó truy cập tệp **RevitAPI.CHM** – tài liệu chính thức của Revit API.
 
 **Cách cài đặt và truy cập SDK**:  

@@ -1,4 +1,5 @@
-1.4. Thêm Revit API vào dự án  
+1.4. Thêm Revit API vào dự án 
+
 Chúng ta đã thiết lập dự án plugin Revit trong Visual Studio, nhưng hiện tại dự án chỉ chứa một lớp cơ bản chưa thể truy cập Revit API. Để sử dụng các lớp và loại dữ liệu trong Revit API, chúng ta cần thêm các tệp API vào dự án.
 
 **Thêm tệp Revit API**:  
