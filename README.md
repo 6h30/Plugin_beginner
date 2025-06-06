@@ -1,4 +1,4 @@
-# Plugin_begineer- 
+# Plugin_begineer
 C# plugin for begineer 
 
 Hướng dẫn sử dụng Revit API cho nhóm Triển khai, Kết cấu và Kiến trúc
@@ -18,3 +18,9 @@ Mục tiêu bạn sẽ đạt được:
 *Duc Truong,*
 
 *Developer, BIM Automation Department*
+
+>**OMD ARCHITECTURE**
+>
+>480 Nguyen Tat Thanh, District 4, HCM City
+>
+>*w: www.omdstudio.art* | *M: +84 933 475 101*
