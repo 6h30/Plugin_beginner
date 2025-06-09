@@ -1,6 +1,4 @@
-Dưới đây là bản dịch tiếng Việt và phần **README** đã được biên soạn từ nội dung "3-3-Revit Geometry Basics":
 
----
 
 # 📐 Revit API – Cơ Bản Về Hình Học (Geometry Basics)
 

@@ -1,4 +1,5 @@
 3.4. Duyệt hình học (Traversing Geometry)  
+
 Sau khi học cách lấy hình học (geometry) của một phần tử, chúng ta sẽ tạo một lệnh để trích xuất các mặt (faces) của một tường (wall) và tính tổng diện tích của chúng. Lệnh này sẽ sử dụng đối tượng `Options` để cấu hình chi tiết hình học và duyệt qua các đối tượng hình học để lấy thông tin.
 
 **Tra cứu Geometry**:  
