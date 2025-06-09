@@ -1,4 +1,5 @@
 3.5. Giao cắt hình học (Intersecting Geometry)  
+
 Sau khi học cách trích xuất hình học (geometry) của phần tử, chúng ta sẽ sử dụng hình học để kiểm tra va chạm (clash detection) bằng bộ lọc `ElementIntersectsSolidFilter`. Bộ lọc này là một bộ lọc chậm (slow filter), nhận một đối tượng `Solid` làm tham số, và được dùng để tìm các phần tử giao cắt với khối hình học đó. Trong phần này, chúng ta sẽ tạo một lệnh để chọn một cột (column), lấy khối hình học (`Solid`) của nó, và kiểm tra xem nó có giao cắt với mái (roof) nào không, sau đó chọn các mái giao cắt.
 
 **Tra cứu ElementIntersectsSolidFilter**:  

@@ -1,4 +1,5 @@
 **4.1. Views (Tạo ViewPlan)**  
+
 Revit API cung cấp nhiều cách để tạo, chỉnh sửa và hiển thị phần tử, bao gồm việc tạo các khung nhìn (views), gắn thẻ (tagging) và tạo tờ (sheets). Các lớp khung nhìn chính kế thừa từ lớp `View` bao gồm: `View3D`, `ViewDrafting`, `ViewPlan`, `ViewSection`, và `ViewSheet`. Mỗi khung nhìn có thuộc tính `ViewType` (ví dụ: `FloorPlan`, `Elevation`) và `ViewFamilyType` (loại khung hình dùng để tạo khung nhìn). Trong phần này, chúng ta sẽ tạo một lệnh để tự động tạo một **Floor Plan** dựa trên tầng `Ground Floor`.
 
 **Tra cứu ViewPlan**:  

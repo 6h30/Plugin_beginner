@@ -1,4 +1,5 @@
 **5.1. External Applications (Ứng dụng bên ngoài)**  
+
 Trong các phần trước, chúng ta đã sử dụng `IExternalCommand` để tạo các lệnh thực thi trong Revit. Phần này giới thiệu một cách khác để tương tác với Revit: **External Applications**, sử dụng các giao diện `IExternalApplication` và `IExternalDBApplication`. Các ứng dụng này cho phép thực thi mã dựa trên sự kiện (events) hoặc tùy chỉnh giao diện người dùng (UI).
 
 **Tổng quan về External Applications**:  

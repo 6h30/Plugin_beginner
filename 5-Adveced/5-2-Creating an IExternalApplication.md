@@ -1,4 +1,5 @@
 **5.2. Creating an IExternalApplication (Tạo lớp IExternalApplication)**  
+
 Như đã học ở phần trước, chúng ta có thể tùy chỉnh giao diện ribbon của Revit bằng cách tạo một lớp add-in triển khai giao diện `IExternalApplication`. Trong phần này, chúng ta sẽ tạo một lớp `IExternalApplication` cơ bản để bắt đầu tùy chỉnh giao diện người dùng (UI).
 
 **Hướng dẫn tạo IExternalApplication**:  

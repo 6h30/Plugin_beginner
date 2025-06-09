@@ -17,7 +17,7 @@ Mục tiêu bạn sẽ đạt được:
 
 *Duc Truong,*
 
-*Developer, BIM Automation Department*
+*Developer, BIM Automation Team*
 
 >**OMD ARCHITECTURE**
 >

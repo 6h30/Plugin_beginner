@@ -1,4 +1,5 @@
 3.6. Chiếu tia (Projecting Rays)  
+
 Bộ lọc giao cắt (`ElementIntersectsSolidFilter`) hữu ích để kiểm tra va chạm giữa các phần tử tiếp xúc, nhưng để kiểm tra mối quan hệ giữa các phần tử không chạm nhau, chúng ta cần chiếu tia (project rays). Chiếu tia là việc gửi một vector từ một điểm xuất phát để xem nó giao cắt với phần tử nào trong không gian 3D. Trong phần này, chúng ta sẽ sử dụng lớp `ReferenceIntersector` để chiếu tia từ chân cột (column) lên trên và tính khoảng cách đến mái (roof).
 
 **Tra cứu ReferenceIntersector**:  

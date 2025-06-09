@@ -1,4 +1,5 @@
 **5.3. Customizing the User Interface (Tùy chỉnh UI)**  
+
 Sau khi triển khai giao diện `IExternalApplication`, chúng ta sẽ tùy chỉnh giao diện người dùng (UI) bằng cách thêm một tab ribbon, một panel và một nút lệnh liên kết với lệnh `PlaceFamily` (tạo từ các phần trước). Phần này hướng dẫn cách thực hiện trong Visual Studio.
 
 **Sửa lỗi từ video trước**:  

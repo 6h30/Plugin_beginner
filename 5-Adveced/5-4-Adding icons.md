@@ -1,4 +1,5 @@
 **5.4. Adding Icons (Thêm biểu tượng)**  
+
 Sau khi tạo tab tùy chỉnh trên ribbon Revit, chúng ta có thể thêm biểu tượng (icon) vào các nút lệnh để dễ nhận diện. Phần này hướng dẫn cách thêm biểu tượng 32x32 pixel cho một nút lệnh trong lớp `IExternalApplication`.
 
 **Yêu cầu về biểu tượng**:  

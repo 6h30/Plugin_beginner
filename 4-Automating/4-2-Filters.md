@@ -1,4 +1,5 @@
-**4.2. Filters (Tạo và Áp dụng Bộ lọc)**  
+**4.2. Filters (Tạo và Áp dụng Bộ lọc)** 
+ 
 Revit API cho phép tạo các bộ lọc (filters) để kiểm soát hiển thị phần tử trong khung nhìn. Bộ lọc dựa trên tham số (`ParameterFilterElement`) là loại bộ lọc dựa trên quy tắc (rule-based), cho phép lọc phần tử theo giá trị tham số. Trong phần này, chúng ta sẽ tạo một lệnh để lọc các mặt cắt (sections) có tên chứa chuỗi “WIP” và ẩn chúng trong khung nhìn hiện tại.
 
 **Tra cứu ParameterFilterElement**:  

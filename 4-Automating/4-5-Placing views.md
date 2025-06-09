@@ -1,4 +1,5 @@
 **4.5. Placing Views (Đặt View lên Sheet)**  
+
 Sau khi tạo khung nhìn, chú thích và tạo tờ, bước cuối cùng là đặt khung nhìn lên tờ bằng cách sử dụng lớp `Viewport`. Không giống các lớp khung nhìn khác, `Viewport` kế thừa từ `Element` (không phải `View`) và được dùng để định vị khung nhìn trên tờ. Trong phần này, chúng ta sẽ tạo một lệnh để đặt một `ViewPlan` (tạo từ trước) vào trung tâm của một `ViewSheet` (tờ).
 
 **Tra cứu Viewport**:  

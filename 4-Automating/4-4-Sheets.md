@@ -1,4 +1,5 @@
 **4.4. Sheets (Tạo ViewSheet)**  
+
 Sau khi chú thích khung nhìn, bước tiếp theo là đặt chúng lên các tờ (sheets). Trong Revit API, tờ là một loại khung nhìn (`ViewSheet`), kế thừa từ lớp `View`. Chúng ta có thể tạo tờ bằng phương thức `ViewSheet.Create`. Trong phần này, chúng ta sẽ tạo một lệnh để tự động tạo một tờ mới, sử dụng `TitleBlock` mặc định và đặt tên cũng như số hiệu cho tờ.
 
 **Tra cứu ViewSheet**:  

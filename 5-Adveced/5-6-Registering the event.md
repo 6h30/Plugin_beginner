@@ -1,4 +1,5 @@
 **5.6. Registering the Event (Đăng ký sự kiện)**  
+
 Sau khi tạo phương thức xử lý sự kiện `ElementChangedEvent` (phần 5.5), chúng ta cần đăng ký sự kiện `DocumentChanged` để nó kích hoạt khi tài liệu thay đổi qua một giao dịch (transaction). Phần này hướng dẫn cách đăng ký sự kiện trong `OnStartup` và hủy đăng ký trong `OnShutdown` trong lớp `IExternalDBApplication`.
 
 **Tra cứu sự kiện**:  

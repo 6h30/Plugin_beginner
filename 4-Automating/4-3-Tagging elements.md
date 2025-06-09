@@ -1,4 +1,5 @@
 **4.3. Tagging Elements (Gắn thẻ phần tử)**  
+
 Sau khi học cách tạo khung nhìn và áp dụng bộ lọc, chúng ta sẽ tìm hiểu cách chú thích (annotate) phần tử bằng cách gắn thẻ (tagging) sử dụng Revit API. Lớp `IndependentTag` được sử dụng để tạo thẻ cho các phần tử như cửa sổ, cửa đi, hoặc tường. Trong phần này, chúng ta sẽ tạo một lệnh để tự động gắn thẻ cho tất cả cửa sổ (windows) và cửa đi (doors) trong khung nhìn hiện tại.
 
 **Tra cứu IndependentTag**:  
