@@ -1,114 +1,96 @@
-kịch bản video hướng dẫn từng bước — trình bày dạng video tutorial có thoại, từng bước rõ ràng, kết hợp phần hình ảnh minh họa , với nội dung sau: 
-1-1-The Revit API
-Selecting transcript lines in this section will navigate to timestamp in the video
-- [Instructor] To create Revit plugins we need to work with the Revit API, or Application Programming Interface. This will allow us to access and interact with the Revit project data base. If you haven't heard the term API before, this is simply a set of functions and procedures that allows for one piece of software to communicate with another. In our case, the Revit API provides us methods in the form of functions and classes which we can use to send commands to Revit. Revit will understand these through the API and return something like an object or an action. A common way of thinking about the API is like a waiter in a restaurant. Say we have a menu of items to order from which the kitchen can make. The problem is we can't get the item we want from the menu as we don't have access to the kitchen. This is where a waiter, or the API, comes in. We can request items from the kitchen, Revit in our case, by requesting it through the waiter, or Revit API. The waiter will then send the order to the kitchen and bring the item back, or object which we have requested. So the waiter, or API for Revit, comes primarily in the form of two different files. The RevitAPI.dll and the RevitAPIUI.dll. These are both automatically added to the default installation file path for Revit and are accessible by any programming language compatible with the dot net framework, such as C#, which we'll be using for this course. The RevitAPI.dll file provides methods to access Revit's documents, elements and parameters at a database level. For example, it allows us to access the wall class which provides methods and properties associated with the wall element in Revit. The RevitAPIUI.dll provides access to Revit's interface, which allows us to customize the interface. There are also additional API files, including the RevitAPIIFC.dll, the RevitAPIMarcos.dll, and the RevitAPIUIMacros.dll. However, in this course we'll stick to the primary RevitAPI and RevitAPIUI files. So by accessing the RevitAPI through plugins we can edit and make changes to Revit through commands that we create.
+Kịch bản bài học: Giới thiệu về Revit API
+Mục tiêu
+Chào mừng các bạn đến với bài học đầu tiên trong khóa học về lập trình plugin cho Revit! Hôm nay, chúng ta sẽ tìm hiểu về Revit API – công cụ mạnh mẽ giúp chúng ta tương tác với cơ sở dữ liệu của Revit. Sau bài học này, bạn sẽ hiểu:
 
----
+Revit API là gì.
+Cách nó hoạt động như một "người phục vụ" trong việc gửi và nhận lệnh.
+Các tệp API chính và vai trò của chúng.
+Tại sao chúng ta sử dụng C# để phát triển plugin.
 
-## 🎬 **Kịch bản bài học 1-1: Giới thiệu Revit API**
+Hãy cùng bắt đầu!
 
-> **Thời lượng 3–5 phút**
-> **Định dạng:** Hội thoại + thuyết minh + mô phỏng hình ảnh
+Phần 1: Giới thiệu về API
+Hướng dẫn viên (giọng điệu hào hứng):Xin chào mọi người! Hôm nay, chúng ta sẽ khám phá một chủ đề thú vị: Revit API. Nếu bạn đang nghĩ "API là cái gì vậy?", đừng lo, mình sẽ giải thích một cách thật đơn giản!
 
----
+Bước 1: Hiểu API là gìAPI, hay Application Programming Interface, là một tập hợp các hàm và quy trình giúp phần mềm này "nói chuyện" với phần mềm khác. Hãy tưởng tượng bạn đang ở một nhà hàng. Bạn muốn gọi món ăn, nhưng bạn không thể vào bếp để tự làm. Thay vào đó, bạn nói với người phục vụ, và người phục vụ sẽ mang yêu cầu của bạn đến bếp, rồi trả lại món ăn bạn muốn. Trong trường hợp này:
+Nhà bếp là Revit – nơi chứa cơ sở dữ liệu dự án.
+Người phục vụ là Revit API – giúp chúng ta gửi lệnh và nhận kết quả từ Revit.
 
-### 📌 **Cảnh mở đầu: Giới thiệu**
 
-**\[Instructor - Giọng nhẹ nhàng, rõ ràng]**
 
-> Xin chào! Trong bài học đầu tiên này, chúng ta sẽ tìm hiểu về **Revit API** – công cụ chính giúp bạn tạo các plugin tùy chỉnh cho Revit.
+Hành động trên màn hình:  
 
----
+Hiển thị một hình ảnh minh họa: một người phục vụ nhận order từ khách và mang món ăn từ bếp ra.  
+Chèn text: "Revit API = Người phục vụ giữa bạn và Revit."
 
-### 📌 **Cảnh 1: API là gì?**
 
-**\[Instructor]**
+Phần 2: Revit API hoạt động như thế nào?
+Hướng dẫn viên (giọng điệu rõ ràng):Bây giờ, hãy xem Revit API thực sự làm gì. API cung cấp cho chúng ta các phương thức (methods) dưới dạng hàm và lớp (classes) để gửi lệnh đến Revit. Khi Revit nhận lệnh, nó sẽ trả về một kết quả – như một đối tượng hoặc một hành động cụ thể.
 
-> Vậy Revit API là gì?
-> API – hay “Application Programming Interface” – là một cầu nối giúp hai phần mềm giao tiếp với nhau.
+Bước 2: Ví dụ về hoạt động của APIHãy tưởng tượng bạn muốn lấy thông tin về một bức tường trong dự án Revit. Bạn gửi yêu cầu qua API, như: "Hãy cho tôi biết chiều cao của bức tường này." API sẽ liên lạc với cơ sở dữ liệu Revit, lấy thông tin và trả về cho bạn.
 
-**\[Chèn hình minh họa]**
+Hành động trên màn hình:  
 
-* Một phần mềm A (Revit plugin)
-* Gửi yêu cầu qua API
-* API chuyển tiếp yêu cầu đến phần mềm B (Revit)
+Hiển thị sơ đồ đơn giản:  Bạn -> [Revit API] -> Revit -> [Kết quả trả về]
 
-**\[Instructor tiếp tục]**
 
-> Trong trường hợp của chúng ta, Revit API cho phép bạn **gửi lệnh** đến Revit và **nhận lại kết quả**, như là tạo một bức tường, truy xuất thông tin cửa sổ, hoặc chỉnh sửa thông số mô hình.
+Chèn ví dụ: Một dòng lệnh giả lập như Wall.GetHeight() để lấy chiều cao của bức tường.
 
----
 
-### 📌 **Cảnh 2: Ví dụ thực tế – API như người bồi bàn**
+Phần 3: Các tệp API chính
+Hướng dẫn viên (giọng điệu nhiệt tình):Để làm việc với Revit API, chúng ta cần biết về hai tệp quan trọng. Đây là "cánh cửa" dẫn chúng ta vào thế giới của Revit!
 
-**\[Instructor]**
+Bước 3: Tìm hiểu RevitAPI.dll và RevitAPIUI.dll  
 
-> Hãy tưởng tượng bạn đang trong một nhà hàng.
+RevitAPI.dll: Tệp này cho phép chúng ta truy cập vào cơ sở dữ liệu của Revit. Ví dụ, bạn có thể sử dụng lớp Wall để lấy thông tin hoặc chỉnh sửa các thuộc tính của bức tường, như chiều cao, chiều dài, hoặc vật liệu.  
+RevitAPIUI.dll: Tệp này giúp chúng ta tùy chỉnh giao diện người dùng của Revit, như thêm nút hoặc thay đổi cách hiển thị.
 
-**\[Chèn hình minh họa vui nhộn: khách hàng, bồi bàn, bếp]**
+Cả hai tệp này được cài đặt tự động trong thư mục mặc định của Revit và tương thích với các ngôn ngữ lập trình hỗ trợ .NET Framework, như C# – ngôn ngữ chúng ta sẽ dùng trong khóa học này.
 
-**\[Instructor tiếp tục]**
+Bước 4: Các tệp API bổ sungNgoài hai tệp chính, còn có các tệp khác như RevitAPIIFC.dll, RevitAPIMarcos.dll, và RevitAPIUIMacros.dll. Nhưng đừng lo, trong khóa học này, chúng ta sẽ tập trung vào hai tệp chính để đơn giản hóa việc học.
 
-> Bạn – người dùng – không thể tự mình vào bếp để lấy món ăn.
-> Nhưng bạn có thực đơn. Bạn chọn món, và gọi bồi bàn.
 
-> Bồi bàn – chính là API – sẽ truyền yêu cầu đến nhà bếp (Revit), và mang món ăn ra cho bạn (kết quả hoặc đối tượng Revit).
+Hành động trên màn hình:  
 
----
+Hiển thị đường dẫn thư mục giả lập của Revit (ví dụ: C:\Program Files\Autodesk\Revit\RevitAPI.dll).  
+Chèn danh sách ngắn:  
+RevitAPI.dll: Truy cập cơ sở dữ liệu.  
+RevitAPIUI.dll: Tùy chỉnh giao diện.
 
-### 📌 **Cảnh 3: Các file API chính trong Revit**
 
-**\[Instructor]**
 
-> Vậy, Revit API xuất hiện dưới dạng các **file thư viện (DLL)** – chúng ta sẽ sử dụng hai file chính:
 
-1. **RevitAPI.dll**
-   ➤ Truy cập dữ liệu bên trong Revit: tài liệu, đối tượng, thông số kỹ thuật.
-   ➤ Ví dụ: truy cập lớp `Wall` để tạo hoặc chỉnh sửa tường.
+Phần 4: Ứng dụng của Revit API
+Hướng dẫn viên (giọng điệu truyền cảm hứng):Vậy Revit API có thể làm gì cho chúng ta? Bằng cách sử dụng API, chúng ta có thể tạo các plugin để tự động hóa công việc trong Revit. Ví dụ:
 
-2. **RevitAPIUI.dll**
-   ➤ Cho phép tùy biến **giao diện người dùng** của Revit: như tạo nút bấm, ribbon, menu tùy chỉnh.
+Tự động tạo các bức tường với kích thước cụ thể.  
+Lấy thông tin chi tiết về các phần tử trong dự án.  
+Tùy chỉnh giao diện để làm việc nhanh hơn.
 
-**\[Chèn hình minh họa cây thư mục cài đặt Revit có chứa 2 file trên]**
+Trong các bài học tiếp theo, chúng ta sẽ học cách viết mã bằng C# để tạo các plugin thực tế!
+Hành động trên màn hình:  
 
-**\[Instructor tiếp tục]**
+Hiển thị ví dụ về một plugin đơn giản: một nút trong Revit để tạo một bức tường với chiều cao cố định.  
+Chèn đoạn mã giả lập (không chạy được):  Wall.Create(document, height: 10.0);
 
-> Ngoài ra còn có một vài file mở rộng, nhưng chúng ta sẽ **chỉ tập trung vào hai file chính này** trong khóa học.
 
----
 
-### 📌 **Cảnh 4: Ngôn ngữ lập trình sử dụng**
 
-**\[Instructor]**
+Phần 5: Kết luận và bước tiếp theo
+Hướng dẫn viên (giọng điệu khích lệ):Các bạn thấy không, Revit API giống như một cánh cửa thần kỳ giúp chúng ta mở khóa sức mạnh của Revit! Hôm nay, chúng ta đã học:
 
-> Revit API được xây dựng trên nền tảng **.NET Framework**, vì thế bạn có thể sử dụng các ngôn ngữ như **C# hoặc VB.NET**.
-> Trong khóa học này, chúng ta sẽ dùng **C#** – vì đây là ngôn ngữ phổ biến, dễ học và mạnh mẽ.
+API là gì và cách nó hoạt động như "người phục vụ".  
+Hai tệp chính: RevitAPI.dll và RevitAPIUI.dll.  
+Ứng dụng của API trong việc tạo plugin.
 
-**\[Hiển thị đoạn mã C# đơn giản]**
+Bước 5: Kêu gọi hành độngTrong bài học tiếp theo, chúng ta sẽ thiết lập môi trường lập trình với Visual Studio và bắt đầu viết mã C# đầu tiên. Hãy chuẩn bị bằng cách cài đặt Revit và Visual Studio nếu bạn chưa có! Link tải sẽ có trong phần mô tả video.
+Cảm ơn các bạn đã theo dõi! Nếu bạn có câu hỏi, hãy để lại bình luận bên dưới. Hẹn gặp lại ở bài học tiếp theo!
+Hành động trên màn hình:  
 
-```csharp
-Wall wall = doc.Create.NewWall(...);
-```
+Hiển thị màn hình kết thúc với text:  
+"Bài học tiếp theo: Thiết lập môi trường lập trình."  
+"Hãy để lại câu hỏi trong phần bình luận!"
 
----
 
-### 📌 **Cảnh 5: Kết thúc – Mục tiêu của bạn là gì?**
+Chèn logo khóa học hoặc hình ảnh minh họa Revit.
 
-**\[Instructor – tổng kết]**
-
-> Qua API, bạn sẽ có khả năng **tự động hóa** các tác vụ, tạo **plugin tùy chỉnh**, và **tối ưu hóa quy trình thiết kế** trong Revit.
-
-> Trong những bài học tiếp theo, chúng ta sẽ bắt đầu thiết lập môi trường lập trình và viết plugin đầu tiên của bạn!
-
----
-
-### ✅ **Checklist cuối video (hiển thị dưới dạng bullet point)**
-
-* [x] Hiểu Revit API là gì
-* [x] Biết sự khác nhau giữa `RevitAPI.dll` và `RevitAPIUI.dll`
-* [x] Nắm được vai trò của C# trong việc lập trình plugin
-* [x] Sẵn sàng cho bài học tiếp theo!
-
----
-
-Bạn có muốn mình **viết tiếp các kịch bản bài 1-2, 1-3...** theo cấu trúc này không? Hoặc nếu bạn đang làm video và cần chèn hình minh họa, icon hoặc slide PowerPoint cho bài này, mình cũng có thể tạo giúp!
