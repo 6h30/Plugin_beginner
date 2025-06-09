@@ -1,3 +1,120 @@
-kịch bản video hướng dẫn từng bước — trình bày dạng video tutorial có thoại, từng bước rõ ràng, kết hợp phần hình ảnh minh họa , với nội dung sau: 
-1-10-Compiling the code
-- [Instructor] We've now created an Add-in file to tell Revit how to load our new plugin. All we need to do next is compile the code and run the .dll, or dynamic link library file that results. A DLL file is basically all of our code compiled into a single file, containing code and data that can be run by other applications. In our case, Revit. So in this video, we'll compile our code and set it to copy to the required location so we can execute and debug our command. When we build our solution, it will result in a DLL file being output. So let's try this and see what happens. In the Build menu at the top, let's select Build Solution. Great. So the output window at the bottom of the screen displays the output from the build. And, in this case, it was a success. As it says Build 1 succeeded. If there was anything wrong with our code, Visual Studio would be sure to tell us about it in this window. And the output would fail. So it's important to check this log if anything goes wrong. You will notice the folder that our solution is compiled into. Let's go ahead and have a look at this folder to see what the contents are. Here you will find three files that our code has produced. The files are the DLL file, our Add-in file, and a file with the extension pdb. Which is short for program database file. This is used when debugging code. Which we'll use in the next video. In order for Revit to read this code, and execute what it contains, it needs to be stored in an Add-in folder. Which Revit will check the contents of every time that it's booted up. This can be one of two different locations. The first is found in ProgramData, Autodesk, Revit, Addins, and 2019. And this tends to store non-user specific files, or plugins. The alternative is found in Users, Username, AppData, Roaming, Autodesk, Revit, Addins, and 2019. And this is unique to the user on the computer. As this is unique to my user account, I'll be using it to store the compiled files. Revit checks this folder each time that it boots up. And reads any of the manifest files included. Then, based on the manifest file, execute the require DLL file. We could just copy our compiled files into this folder and our command would run as expected. This is a very manual process, however. And if we're going to be testing lots of commands through the course, we want to make it a little bit more automated. So to automate the process of putting our compiled files into this folder, we can do so with a build event in Visual Studio. Inside Visual Studio, go to the Project menu at the top. And then, MyRevitCommands Properties. This is where we can adjust settings for our project. In the Build Events tab on the left, we can add pre- and post-build event marks of commands. Which will allow us to copy and paste compiled files into the Add-in folder. Let's do that by selecting Edit Post-build. Which will allow us to construct a command. We can construct the Macro as we would write it in the terminal command line. So to copy, we start with the word copy. We then need to write the path of the file to copy from, in quotation marks. So let's add two quotation marks. Inside of here, we'll add the file path. A quick way of doing this is using the Macros. Inside of here, we can find a Macro called TargetDir. This is the file path that our code is being compiled into. So let's insert that into the quotation marks. And then to ensure that all of the contents of that file are copied, we end the target directory with quotation mark dot quotation mark. So all files will be copied. Next, we need to add in the file path to add to. And this needs to be in another set of quotation marks. So let's add space and double quotation marks. The file path that I'm going to use is the local file path. To get the Roaming file in the user account we can use the shortcut AppData. Unfortunately, this isn't in the Macros menu. So let's simply add dollar sign, round bracket, AppData, and then, close round bracket. So this will take us directly to the Roaming file. And if you recall, the end of the file path is \Autodesk, \Revit, \Addins, \2019. Great. So that's it. And then end it with backslash. Great. So that's all we need. When we compile our code now, the files will be directly copied into that folder. Let's give it a try by hitting OK. And then, selecting Build Solution again. And you can see in the output window, that all of our three files have been copied over.
+Kịch bản bài học: Biên dịch mã và tự động sao chép vào Revit
+Mục tiêu
+Chào mừng các bạn quay lại với khóa học lập trình plugin cho Revit! Trong bài học hôm nay, chúng ta sẽ biên dịch dự án MyRevitCommands để tạo tệp DLL và tự động sao chép các tệp cần thiết vào thư mục add-ins của Revit. Sau bài học này, bạn sẽ biết:
+
+Cách biên dịch dự án trong Visual Studio để tạo tệp DLL.
+Các thư mục add-ins mà Revit kiểm tra để tải plugin.
+Cách thiết lập Post-build Event để tự động sao chép tệp vào thư mục add-ins.
+
+Hãy cùng bắt đầu!
+
+Phần 1: Biên dịch dự án trong Visual Studio
+Hướng dẫn viên (giọng điệu hào hứng):Chúng ta đã tạo lệnh GetElementId và tệp manifest trong các bài trước. Bây giờ, chúng ta sẽ biên dịch mã để tạo tệp DLL (Dynamic Link Library) – chứa toàn bộ mã và dữ liệu của plugin, sẵn sàng để Revit chạy. Hãy cùng làm nào!
+
+Bước 1: Biên dịch dự ánTrong Visual Studio, vào menu Build ở thanh trên cùng và chọn Build Solution. Visual Studio sẽ biên dịch mã và tạo các tệp đầu ra.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, vào Build > Build Solution.  
+Zoom vào cửa sổ Output ở dưới cùng, highlight dòng “Build: 1 succeeded”.  
+Chèn text: “Build Solution: Biên dịch mã thành tệp DLL.”
+
+
+Bước 2: Kiểm tra kết quả biên dịchNếu biên dịch thành công, cửa sổ Output sẽ hiển thị “Build: 1 succeeded”. Nếu có lỗi, Visual Studio sẽ hiển thị chi tiết trong cửa sổ này, vì vậy hãy kiểm tra kỹ nếu biên dịch thất bại. Sau khi biên dịch, các tệp đầu ra sẽ nằm trong thư mục đầu ra của dự án (thường là bin\Debug).
+Hành động trên màn hình:  
+
+Hiển thị cửa sổ Output, highlight “Build: 1 succeeded”.  
+Chèn text: “Kiểm tra Output: Đảm bảo không có lỗi khi biên dịch.”
+
+
+Bước 3: Xem các tệp đầu raĐiều hướng đến thư mục đầu ra (thường là C:\Users\YourName\source\repos\MyRevitCommands\bin\Debug). Bạn sẽ thấy ba tệp:
+
+MyRevitCommands.dll: Tệp chứa mã plugin.  
+MyRevitCommands.addin: Tệp manifest để đăng ký plugin.  
+MyRevitCommands.pdb: Tệp cơ sở dữ liệu chương trình, dùng để gỡ lỗi (chúng ta sẽ dùng sau).
+
+Hành động trên màn hình:  
+
+Hiển thị File Explorer tại thư mục bin\Debug, highlight ba tệp: MyRevitCommands.dll, MyRevitCommands.addin, MyRevitCommands.pdb.  
+Chèn text: “Tệp đầu ra: DLL, manifest, và PDB.”
+
+
+
+
+Phần 2: Thư mục Add-ins của Revit
+Hướng dẫn viên (giọng điệu rõ ràng):Để Revit nhận diện và chạy plugin, chúng ta cần đặt tệp DLL và manifest vào một trong hai thư mục add-ins mà Revit kiểm tra khi khởi động.
+
+Bước 4: Hiểu về thư mục Add-insRevit kiểm tra hai thư mục:
+
+ProgramData\Autodesk\Revit\Addins\2019: Dành cho plugin chung, không phụ thuộc người dùng.  
+Users\Username\AppData\Roaming\Autodesk\Revit\Addins\2019: Dành cho plugin riêng của từng người dùng.
+
+Chúng ta sẽ sử dụng thư mục người dùng (AppData\Roaming) vì nó gắn với tài khoản của bạn.
+Hành động trên màn hình:  
+
+Hiển thị File Explorer, điều hướng đến C:\Users\Username\AppData\Roaming\Autodesk\Revit\Addins\2019.  
+Chèn text: “Thư mục Add-ins: Nơi Revit tìm tệp manifest và DLL.”
+
+
+
+
+Phần 3: Tự động hóa sao chép tệp với Post-build Event
+Hướng dẫn viên (giọng điệu khích lệ):Sao chép tệp DLL và manifest thủ công vào thư mục add-ins rất tốn thời gian, đặc biệt khi chúng ta thử nghiệm nhiều lệnh. Hãy thiết lập Post-build Event trong Visual Studio để tự động hóa việc này!
+
+Bước 5: Mở Project PropertiesTrong Visual Studio, vào menu Project > MyRevitCommands Properties. Chọn tab Build Events ở bên trái.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, vào Project > MyRevitCommands Properties.  
+Zoom vào tab Build Events.
+
+
+Bước 6: Thêm lệnh Post-buildTrong tab Build Events, nhấp vào Edit Post-build. Trong cửa sổ hiện ra, chúng ta sẽ viết lệnh để sao chép tất cả tệp từ thư mục đầu ra vào thư mục add-ins. Nhập lệnh sau:
+copy "$(TargetDir)*.*" "$(AppData)\Autodesk\Revit\Addins\2019\"
+
+Giải thích:
+
+copy: Lệnh sao chép tệp.  
+"$(TargetDir).": Macro của Visual Studio, đại diện cho thư mục đầu ra (như bin\Debug) và sao chép tất cả tệp.  
+"$(AppData)\Autodesk\Revit\Addins\2019": Đường dẫn đến thư mục add-ins của người dùng.
+
+Nhấn OK để lưu.
+Hành động trên màn hình:  
+
+Hiển thị cửa sổ Edit Post-build, nhập lệnh trên.  
+Highlight $(TargetDir) và $(AppData), giải thích bằng text:  
+“$(TargetDir): Thư mục đầu ra (bin\Debug).”  
+“$(AppData): Đường dẫn đến AppData\Roaming.”
+
+
+Zoom vào nút OK.
+
+
+Bước 7: Kiểm tra Post-build EventQuay lại menu Build > Build Solution để biên dịch lại. Kiểm tra cửa sổ Output để đảm bảo các tệp (DLL, manifest, PDB) được sao chép vào C:\Users\Username\AppData\Roaming\Autodesk\Revit\Addins\2019.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, vào Build > Build Solution.  
+Hiển thị cửa sổ Output, highlight thông báo về việc sao chép tệp.  
+Mở File Explorer tại C:\Users\Username\AppData\Roaming\Autodesk\Revit\Addins\2019, highlight các tệp được sao chép.  
+Chèn text: “Post-build Event: Tự động sao chép tệp vào thư mục Add-ins.”
+
+
+
+
+Phần 4: Kết luận và bước tiếp theo
+Hướng dẫn viên (giọng điệu truyền cảm hứng):Chúc mừng các bạn! Hôm nay, chúng ta đã:
+
+Biên dịch dự án để tạo tệp DLL và các tệp liên quan.  
+Hiểu về thư mục add-ins của Revit.  
+Thiết lập Post-build Event để tự động sao chép tệp vào thư mục add-ins.
+
+Bây giờ, plugin của chúng ta đã sẵn sàng để chạy trong Revit! Trong bài học tiếp theo, chúng ta sẽ mở Revit, kiểm tra lệnh GetElementId, và gỡ lỗi nếu cần.
+Bước 8: Kêu gọi hành độngHãy mở Revit và kiểm tra thư mục C:\Users\Username\AppData\Roaming\Autodesk\Revit\Addins\2019 để đảm bảo các tệp đã được sao chép. Nếu bạn gặp vấn đề khi biên dịch hoặc sao chép, hãy để lại câu hỏi trong phần bình luận, mình sẽ hỗ trợ ngay!
+Cảm ơn các bạn đã theo dõi! Hẹn gặp lại ở bài học tiếp theo!
+Hành động trên màn hình:  
+
+Hiển thị màn hình kết thúc với text:  
+"Bài học tiếp theo: Chạy và gỡ lỗi plugin trong Revit."  
+"Gặp vấn đề? Để lại câu hỏi trong phần bình luận!"
+
+
+Chèn logo khóa học hoặc hình ảnh minh họa Revit/Visual Studio.
+

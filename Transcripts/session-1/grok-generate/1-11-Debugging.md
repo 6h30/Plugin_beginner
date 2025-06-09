@@ -1,3 +1,105 @@
-kịch bản video hướng dẫn từng bước — trình bày dạng video tutorial có thoại, từng bước rõ ràng, kết hợp phần hình ảnh minh họa , với nội dung sau: 
-1-11-Debugging
-- [Instructor] We have learned how to automatically compile our command, and copy the files into the required directory. We can also automatically launch Revit from within Visual Studio too and test our command. To do this, we need to run the solution in debug mode. This will allow us to test our command and investigate any bugs that it might contain. To test the command, we need to tell Visual Studio to run Revit once debug mode is started. To do this, go to the debug menu at the top, and then, properties at the bottom. And this is where we can add Revit. To do that, we need to tell Visual Studio what .exe file to run; that is Revit.exe. To add this, click the Start external program option, and then Browse. Navigate to where you have Revit installed. On my machine, this is in C:, Program Files, Autodesk, Revit 2019. And in here, we can find Revit.exe. Go ahead and click Open to add that in. So now we can test our command directly from Visual Studio. Let's try that by going up to the play symbol at the top, and clicking Start. And the first thing we get is this window pop-up which you may have seen in Revit before. This happens when Revit is loading an unregistered add-in. That is, it does not have a trusted certificate associated with it. Getting the required certificate is beyond the scope of this course. However, we don't really need it as we're not planning to distribute this plug-in. So, for now, let's just click Always Load, so that the plug-in is always loaded. To test the command, let's create a new project by clicking New. and I'm going to select the Architectural Template. We can find our new command in the Add-Ins tab at the top, and then at the left, External Tools. And this drop down here is our command: GetElementID. You can see the name and description associated with it. Let's give it a whirl. Go ahead and select the command. And select an element. Awesome. So you can see our new command is working perfectly. A new window has popped up with the element ID details. You can also test the try/catch statements which were created to catch when someone exits out of the command. So, let's try the command again. And hit escape for Cancel. And there's the message. "The user aborted the pick operation." Debugging mode lets us look at what is going on under the hood while our code is running. So, let's stop this session by switching back to Visual Studio and pressing the red square at the top for stop debugging. Then in our class, let's add a breakpoint to our code. This allows us to check what's happening at a specific line of code while our code is running. To do that, let's add one in at line 27. On the left of the number of the line, in the gray column, click the left mouse button. And you can see a break-point has been added with the red circle. So now, when we debug our code, when this line of code is executed, Visual Studio will step into the code and check all of the current variables. Let's try that by starting the debugger again. And create a new project. And run the command again. Great, so you can see that it's taken us back to our code. And in the auto window in the bottom, you can see all the current variables and associated data. So currently, the pick object variable is drawing a reference object and if we click the little triangle on the left, we can expand the reference object and look at all of its properties and associated values. This is incredibly useful if our code starts to do unexpected things. We can also step into and through our code line by line and watch what the data does. To do this, click the little down pointing blue arrow at the top, which lets us step into. And you can see the data at the bottom updated. Keep these tools in mind when creating plug-ins, as they are extremely useful when finding inevitable bugs. By stepping through the code line by line, we can check how variables and data is changing. If we want to continue the command and step out of debugging mode, we simply click Continue at the top.
+Kịch bản bài học: Gỡ lỗi plugin trong Revit
+Mục tiêu
+Chào mừng các bạn quay lại với khóa học lập trình plugin cho Revit! Trong bài học hôm nay, chúng ta sẽ học cách chạy và gỡ lỗi lệnh GetElementId bằng chế độ debug trong Visual Studio. Sau bài học này, bạn sẽ biết:
+
+Cách cấu hình Visual Studio để chạy Revit trong chế độ debug.
+Cách xử lý thông báo về add-in chưa đăng ký trong Revit.
+Cách thêm breakpoint và sử dụng các công cụ gỡ lỗi để kiểm tra biến và dữ liệu.
+
+Hãy cùng bắt đầu!
+
+Phần 1: Cấu hình Visual Studio để chạy Revit
+Hướng dẫn viên (giọng điệu hào hứng):Chúng ta đã biên dịch dự án MyRevitCommands và tự động sao chép tệp DLL và manifest vào thư mục add-ins. Bây giờ, chúng ta sẽ cấu hình Visual Studio để chạy Revit trực tiếp và kiểm tra lệnh GetElementId trong chế độ debug, giúp phát hiện lỗi nếu có.
+
+Bước 1: Cấu hình chạy Revit.exeTrong Visual Studio, vào menu Debug > Properties (hoặc nhấp chuột phải vào dự án MyRevitCommands và chọn Properties). Trong tab Debug, chọn tùy chọn Start external program và nhấn Browse. Điều hướng đến thư mục cài đặt Revit, thường là C:\Program Files\Autodesk\Revit 2019, và chọn Revit.exe. Nhấn Open để thêm.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, vào Debug > Properties.  
+Zoom vào tùy chọn Start external program, nhấn Browse.  
+Hiển thị File Explorer tại C:\Program Files\Autodesk\Revit 2019, highlight Revit.exe, nhấn Open.  
+Chèn text: “Cấu hình Revit.exe: Chạy Revit trực tiếp từ Visual Studio.”
+
+
+
+
+Phần 2: Chạy và kiểm tra lệnh trong Revit
+Hướng dẫn viên (giọng điệu rõ ràng):Hãy chạy lệnh GetElementId trong chế độ debug để xem nó hoạt động thế nào trong Revit!
+
+Bước 2: Chạy debug modeTrong Visual Studio, nhấp vào biểu tượng Play (hoặc nhấn F5) để chạy giải pháp ở chế độ debug. Revit sẽ khởi động. Khi Revit mở, bạn có thể thấy một cửa sổ thông báo rằng plugin chưa được đăng ký (do thiếu chứng chỉ đáng tin cậy). Vì chúng ta không định phát hành plugin, chọn Always Load để luôn tải plugin.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, nhấp vào biểu tượng Play.  
+Hiển thị Revit khởi động với cửa sổ thông báo “Unregistered Add-in”.  
+Zoom vào nút Always Load, nhấn chọn.  
+Chèn text: “Always Load: Cho phép Revit tải plugin chưa đăng ký.”
+
+
+Bước 3: Kiểm tra lệnh trong RevitTrong Revit, tạo một dự án mới bằng cách nhấp New và chọn Architectural Template. Chuyển đến tab Add-Ins > External Tools, bạn sẽ thấy lệnh Get Element ID (tên và mô tả được định nghĩa trong tệp manifest). Nhấp vào lệnh, sau đó chọn một phần tử (như một bức tường). Một hộp thoại TaskDialog sẽ hiện ra, hiển thị Element ID của phần tử.
+Hành động trên màn hình:  
+
+Hiển thị Revit, nhấp New > Architectural Template.  
+Zoom vào tab Add-Ins > External Tools, highlight Get Element ID.  
+Mô phỏng chọn một bức tường, hiển thị hộp thoại TaskDialog với Element ID.  
+Chèn text: “Lệnh GetElementId: Hiển thị Element ID của phần tử được chọn.”
+
+
+Bước 4: Kiểm tra Try-CatchĐể kiểm tra khối try-catch trong mã, chạy lại lệnh Get Element ID và nhấn Esc để hủy. Một thông báo sẽ hiển thị: “The user aborted the pick operation.” Điều này xác nhận khối try-catch hoạt động đúng, bắt lỗi khi người dùng thoát.
+Hành động trên màn hình:  
+
+Hiển thị Revit, chạy lại lệnh Get Element ID, nhấn Esc.  
+Hiển thị thông báo lỗi: “The user aborted the pick operation.”  
+Chèn text: “Try-Catch: Xử lý lỗi khi người dùng hủy lệnh.”
+
+
+
+
+Phần 3: Thêm Breakpoint và Gỡ lỗi
+Hướng dẫn viên (giọng điệu khích lệ):Chế độ debug không chỉ giúp chạy lệnh mà còn cho phép chúng ta kiểm tra dữ liệu và phát hiện lỗi. Hãy thêm breakpoint để xem điều gì xảy ra bên trong mã khi lệnh chạy!
+
+Bước 5: Dừng debug và thêm BreakpointQuay lại Visual Studio, nhấn biểu tượng Stop (hình vuông đỏ) để dừng phiên debug hiện tại. Mở tệp GetElementId.cs, tìm dòng mã nơi gọi PickObject (ví dụ: dòng 27). Nhấp vào cột màu xám bên trái số dòng để thêm breakpoint – một vòng tròn đỏ sẽ xuất hiện.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, nhấn biểu tượng Stop.  
+Mở GetElementId.cs, nhấp vào cột bên trái dòng Reference pickedObj = uidoc.Selection.PickObject(ObjectType.Element);.  
+Highlight vòng tròn đỏ của breakpoint.  
+Chèn text: “Breakpoint: Dừng mã tại dòng cụ thể để kiểm tra.”
+
+
+Bước 6: Chạy lại Debug và Kiểm tra biếnNhấn Play để chạy lại debug mode. Trong Revit, tạo một dự án mới và chạy lệnh Get Element ID. Khi mã đến breakpoint, Visual Studio sẽ tạm dừng. Cửa sổ Autos (hoặc Locals) ở dưới cùng sẽ hiển thị các biến hiện tại, như pickedObj. Mở rộng pickedObj để xem các thuộc tính, như ElementId.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, nhấn Play để chạy debug.  
+Trong Revit, chạy lệnh Get Element ID, chọn một phần tử.  
+Hiển thị Visual Studio tạm dừng tại breakpoint, zoom vào cửa sổ Autos, mở rộng pickedObj để xem ElementId.  
+Chèn text: “Gỡ lỗi: Kiểm tra giá trị biến trong khi mã chạy.”
+
+
+Bước 7: Bước qua mã (Step Into)Để kiểm tra mã từng dòng, nhấp vào biểu tượng Step Into (mũi tên xanh hướng xuống) ở thanh công cụ debug. Xem dữ liệu trong cửa sổ Autos cập nhật khi mã chạy qua từng dòng. Điều này rất hữu ích để tìm lỗi nếu lệnh hoạt động không như mong đợi. Để tiếp tục lệnh, nhấn Continue (mũi tên xanh) ở thanh công cụ.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, nhấp Step Into, highlight dữ liệu cập nhật trong cửa sổ Autos.  
+Nhấn Continue để tiếp tục lệnh.  
+Chèn text: “Step Into: Kiểm tra mã từng dòng để tìm lỗi.”
+
+
+
+
+Phần 4: Kết luận và bước tiếp theo
+Hướng dẫn viên (giọng điệu truyền cảm hứng):Chúc mừng các bạn! Hôm nay, chúng ta đã:
+
+Cấu hình Visual Studio để chạy Revit trong chế độ debug.  
+Kiểm tra lệnh GetElementId trong Revit và xác nhận try-catch hoạt động.  
+Thêm breakpoint và sử dụng công cụ gỡ lỗi để kiểm tra biến và dữ liệu.
+
+Những công cụ gỡ lỗi này sẽ rất hữu ích khi bạn phát triển các plugin phức tạp hơn. Trong bài học tiếp theo, chúng ta sẽ khám phá cách cải tiến lệnh hoặc tạo các lệnh Revit mới.
+Bước 8: Kêu gọi hành độngHãy thử chạy lại lệnh GetElementId và sử dụng breakpoint để kiểm tra các biến khác. Nếu bạn gặp vấn đề khi debug hoặc chạy plugin, hãy để lại câu hỏi trong phần bình luận, mình sẽ hỗ trợ ngay!
+Cảm ơn các bạn đã theo dõi! Hẹn gặp lại ở bài học tiếp theo!
+Hành động trên màn hình:  
+
+Hiển thị màn hình kết thúc với text:  
+"Bài học tiếp theo: Cải tiến hoặc tạo lệnh Revit mới."  
+"Gặp vấn đề? Để lại câu hỏi trong phần bình luận!"
+
+
+Chèn logo khóa học hoặc hình ảnh minh họa Revit/Visual Studio, mô phỏng hộp thoại TaskDialog hiển thị Element ID.
+

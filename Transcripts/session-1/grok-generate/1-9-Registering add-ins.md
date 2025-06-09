@@ -1,3 +1,128 @@
-kịch bản video hướng dẫn từng bước — trình bày dạng video tutorial có thoại, từng bước rõ ràng, kết hợp phần hình ảnh minh họa , với nội dung sau: 
-1-9-Registering add-ins
-- [Instructor] So far in the course, we've successfully coded our first Revit plugin command. What we need to now is load it into Revit. In order to do that, we need to register the command for it to show up in Revit. And we do this by creating what's known as a manifest file. When Revit boots up, it will rate the manifest files located in one of two specific file locations in order to determine what plugins to load and with what options. Let's have a look at adding a manifest file into our project. To add a manifest file, right-click the project name and select add new item. Here we can select new items to add to our project. Let's select application manifest file. And the first thing we'll need to do is rename the file to match the name of our plugin so that Revit knows which manifest file to look inside. So let's rename this to myrevitcommands and the extension we need for this file is .addin, as this is the type of file that Revit will look for. And then go ahead and click add. Great, so that's created the file although currently it's populated with a lot of code we don't need. So let's select all of that and hit delete. Then let's add in the code needed for our Revit add-in. Autodesk provides templates for command add-in files, which you can find on the Autodesk Revit Developer Guide online. However, I've gone ahead and copied this into a txt file, which you can find in the start exercise folder for this video. So once you have the myrevitcommnands.txt file open, go ahead and select all the text and hit Control + Save for copy, and then Control + V for paste inside of our add-in. As you can see, the add-in file is not C#, but it's written in XML, a markup language. This is used to create settings for our add-in when it's loaded. Each of the names of the settings is shown between the angle brackets. For example, name, assembly, or description. The value for these settings then go in between the two tags. So name, for example, has two name tags with the value, myrevitcommands. Some of the essential settings are the name of the plugin, this case, myrevitcommands, the assembly full path, this is the location of our compiled dll file, and it includes the extension .dll. As we'll be saving the file directly in the add-ins folder, we only need to specify the file name, not the path. Next we need to include and ID for our add-in in between the add-in ID tags. This is in the form of a GUID, or global unique identifier, which needs to be unique for each command. The associator has functionality to generate GUIDs for us. Let's use this feature to generate a new GUID for this command. To do this, go to the tools manual at the top, and then, create GUID. This will bring up the create GUID window which we can use to generate different GUIDs. We just need the GUID itself with no formatting. So for the options, let's select the last and then click new GUID, and copy, so that it's copied to our clipboard, so we can now exit the window, and let's paste it in between the add-in tags. This comes with some excess formatting which we don't need, so let's remove the angle brackets, the ram brackets and the quotation marks on both sides. Perfect! So there's that GUID. The full class name tag indicates the name space and class name that our command resides in. In our case, our command is the getillumid class, inside of the myrevitcommands name space. This is so Revit knows which class is the entry point for the command. Tags such as text and description are optional. These are the name of the command in Revit, and the description when hovering over them, so they're quite useful to add. Vendor ID is required and this is unique. In my case, it's Jeremy, but you can change this. The description is optional. And the visibility mode indicates when the command is visible, such as always visible. Let's change this to not visible when no active document, as we don't want the command showing when it's not usable. To do this, simply replace always visible with not visible when no active document, ensuring that each word is capitalized with no spaces. These aren't the only tags that we can add to the manifest file. In the online developer documents, you'll find a description of all the tags to add. For now, let's stick with these ones. Now that we've created the add-in file, what we need to do is make sure that it copies to the output file when we compile our code. So let's change the properties of the file to copy to the output file. To do that, select the add-in file in the solution explorer, and the properties on the bottom right in the copy to output directory, let's change this to copy if new. Perfect! Now we just need to build our code and test if it's working properly.
+Kịch bản bài học: Đăng ký Add-in trong Revit
+Mục tiêu
+Chúc mừng các bạn đã hoàn thành lệnh GetElementId! Trong bài học hôm nay, chúng ta sẽ học cách đăng ký plugin vào Revit bằng cách tạo một tệp manifest (.addin). Sau bài học này, bạn sẽ biết:
+
+Tệp manifest là gì và vai trò của nó trong việc tải plugin vào Revit.
+Cách tạo và cấu hình tệp manifest trong Visual Studio.
+Cách tạo GUID và đảm bảo tệp manifest được sao chép khi biên dịch.
+
+Hãy cùng bắt đầu!
+
+Phần 1: Giới thiệu về Manifest File
+Hướng dẫn viên (giọng điệu hào hứng):Chúng ta đã viết lệnh GetElementId, nhưng để Revit nhận diện và hiển thị lệnh này, chúng ta cần đăng ký plugin bằng một tệp manifest (.addin). Khi Revit khởi động, nó sẽ tìm các tệp .addin trong hai thư mục cụ thể để xác định plugin nào cần tải và với tùy chọn nào. Hãy cùng tạo tệp manifest cho dự án MyRevitCommands!
+
+Bước 1: Hiểu về Manifest FileTệp manifest là một tệp XML chứa các cài đặt cho plugin, như tên, đường dẫn tệp DLL, và ID duy nhất. Revit sử dụng tệp này để biết cách hiển thị lệnh trong tab Add-Ins.
+Hành động trên màn hình:  
+
+Hiển thị giao diện Revit, zoom vào tab Add-Ins.  
+Chèn text: “Manifest File: Đăng ký plugin để hiển thị trong Revit.”
+
+
+
+
+Phần 2: Tạo tệp Manifest trong Visual Studio
+Hướng dẫn viên (giọng điệu rõ ràng):Hãy quay lại Visual Studio để thêm tệp manifest vào dự án MyRevitCommands.
+
+Bước 2: Thêm tệp ManifestTrong Solution Explorer, nhấp chuột phải vào tên dự án (MyRevitCommands), chọn Add > New Item. Trong cửa sổ Add New Item, tìm và chọn Application Manifest File. Đổi tên tệp thành MyRevitCommands.addin (lưu ý phần mở rộng .addin là bắt buộc để Revit nhận diện). Nhấn Add.
+Hành động trên màn hình:  
+
+Hiển thị Solution Explorer, nhấp chuột phải vào MyRevitCommands, chọn Add > New Item.  
+Hiển thị cửa sổ Add New Item, highlight Application Manifest File, nhập MyRevitCommands.addin.  
+Zoom vào nút Add.
+
+
+Bước 3: Xóa nội dung mặc địnhTệp MyRevitCommands.addin mới tạo sẽ chứa mã mặc định không cần thiết. Mở tệp, chọn toàn bộ nội dung và xóa.
+Hành động trên màn hình:  
+
+Hiển thị tệp MyRevitCommands.addin trong Visual Studio, highlight toàn bộ nội dung và nhấn Delete.
+
+
+Bước 4: Thêm mã XML cho ManifestThay vì viết từ đầu, chúng ta sẽ sử dụng mẫu XML từ Autodesk Revit Developer Guide. Để tiện, bạn có thể tìm mẫu này trong tệp MyRevitCommands.txt trong thư mục bài tập của video. Sao chép nội dung từ tệp MyRevitCommands.txt (Ctrl+C) và dán (Ctrl+V) vào MyRevitCommands.addin. Nội dung mẫu trông như sau:
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Name>MyRevitCommands</Name>
+    <Assembly>MyRevitCommands.dll</Assembly>
+    <AddInId>YOUR_GUID_HERE</AddInId>
+    <FullClassName>MyRevitCommands.GetElementId</FullClassName>
+    <Text>Get Element ID</Text>
+    <Description>Retrieves the Element ID of a selected element</Description>
+    <VendorId>Jeremy</VendorId>
+    <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>
+  </AddIn>
+</RevitAddIns>
+
+Hành động trên màn hình:  
+
+Hiển thị tệp MyRevitCommands.txt (giả lập), sao chép nội dung.  
+Dán nội dung vào MyRevitCommands.addin trong Visual Studio.  
+Chèn text: “Manifest File: XML định nghĩa cài đặt plugin.”
+
+
+
+
+Phần 3: Cấu hình Manifest File
+Hướng dẫn viên (giọng điệu cẩn thận):Bây giờ, chúng ta sẽ chỉnh sửa tệp manifest để đảm bảo nó phù hợp với lệnh GetElementId.
+
+Bước 5: Tạo và thêm GUIDTrong tệp manifest, thay YOUR_GUID_HERE bằng một GUID (Global Unique Identifier) duy nhất. Để tạo GUID, trong Visual Studio, vào Tools > Create GUID. Trong cửa sổ Create GUID, chọn định dạng Registry Format (không có định dạng thừa), nhấn New GUID, sau đó nhấn Copy. Dán GUID vào giữa thẻ <AddInId> và xóa các ký tự thừa (như {} hoặc dấu ngoặc). Ví dụ:
+<AddInId>550e8400-e29b-41d4-a716-446655440000</AddInId>
+
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, vào Tools > Create GUID.  
+Hiển thị cửa sổ Create GUID, chọn Registry Format, nhấn New GUID và Copy.  
+Dán GUID vào MyRevitCommands.addin, xóa {} và các ký tự thừa.  
+Chèn text: “GUID: Định danh duy nhất cho lệnh.”
+
+
+Bước 6: Cấu hình các thẻ XMLKiểm tra và điều chỉnh các thẻ trong tệp manifest:
+
+Name: Tên plugin, giữ là MyRevitCommands.
+Assembly: Tên tệp DLL sau khi biên dịch, là MyRevitCommands.dll (vì chúng ta sẽ lưu vào thư mục add-ins, không cần đường dẫn đầy đủ).
+FullClassName: Namespace và tên lớp, là MyRevitCommands.GetElementId.
+Text: Tên hiển thị của lệnh trong Revit, là Get Element ID.
+Description: Mô tả lệnh, ví dụ: Retrieves the Element ID of a selected element.
+VendorId: ID nhà phát triển, ví dụ: Jeremy (bạn có thể thay bằng ID của mình).
+VisibilityMode: Đổi từ AlwaysVisible thành NotVisibleWhenNoActiveDocument (viết hoa chữ cái đầu, không có dấu cách) để lệnh chỉ hiển thị khi có tài liệu đang mở.
+
+Hành động trên màn hình:  
+
+Hiển thị tệp MyRevitCommands.addin, highlight từng thẻ XML và giải thích ngắn gọn.  
+Zoom vào <VisibilityMode>NotVisibleWhenNoActiveDocument</VisibilityMode>.  
+Chèn text: “Cấu hình Manifest: Đảm bảo lệnh hiển thị đúng ngữ cảnh.”
+
+
+
+
+Phần 4: Cấu hình sao chép tệp Manifest
+Hướng dẫn viên (giọng điệu khích lệ):Để tệp manifest được sao chép khi biên dịch, chúng ta cần điều chỉnh thuộc tính của nó.
+
+Bước 7: Thay đổi thuộc tính Copy to Output DirectoryTrong Solution Explorer, chọn MyRevitCommands.addin. Ở cửa sổ Properties (góc dưới bên phải), đổi thuộc tính Copy to Output Directory thành Copy if newer. Điều này đảm bảo tệp .addin được sao chép vào thư mục đầu ra khi biên dịch.
+Hành động trên màn hình:  
+
+Hiển thị Solution Explorer, highlight MyRevitCommands.addin.  
+Hiển thị cửa sổ Properties, đổi Copy to Output Directory thành Copy if newer.  
+Chèn text: “Copy if newer: Đảm bảo tệp manifest được sao chép khi biên dịch.”
+
+
+
+
+Phần 5: Kết luận và bước tiếp theo
+Hướng dẫn viên (giọng điệu truyền cảm hứng):Chúc mừng các bạn! Hôm nay, chúng ta đã:
+
+Tạo và cấu hình tệp manifest (MyRevitCommands.addin) để đăng ký plugin.  
+Tạo GUID duy nhất và điều chỉnh các thẻ XML cần thiết.  
+Đảm bảo tệp manifest được sao chép khi biên dịch.
+
+Bước tiếp theo là biên dịch dự án và tải plugin vào Revit để kiểm tra lệnh GetElementId hoạt động!
+Bước 8: Kêu gọi hành độngTrong bài học tiếp theo, chúng ta sẽ biên dịch dự án, sao chép tệp DLL và manifest vào thư mục add-ins của Revit, và chạy lệnh trong Revit. Hãy giữ Visual Studio và Revit sẵn sàng! Nếu bạn gặp vấn đề, hãy để lại câu hỏi trong phần bình luận, mình sẽ hỗ trợ ngay.
+Cảm ơn các bạn đã theo dõi! Hẹn gặp lại ở bài học tiếp theo!
+Hành động trên màn hình:  
+
+Hiển thị màn hình kết thúc với text:  
+"Bài học tiếp theo: Biên dịch và chạy plugin trong Revit."  
+"Gặp vấn đề? Để lại câu hỏi trong phần bình luận!"
+
+
+Chèn logo khóa học hoặc hình ảnh minh họa Revit/Visual Studio.
+
