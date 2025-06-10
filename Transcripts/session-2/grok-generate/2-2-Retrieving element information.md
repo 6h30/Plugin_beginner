@@ -1,5 +1,164 @@
-kịch bản video hướng dẫn từng bước — trình bày dạng video tutorial có thoại, từng bước rõ ràng, kết hợp phần hình ảnh minh họa , với nội dung sau: 
-2-2-
-Retrieving element information
-Selecting transcript lines in this section will navigate to timestamp in the video
-- [Instructor] So far we have learned about the different ways that we can classify an element and how to retrieve an element from its element ID. Now that we have a reference to an element from the last video let's have a look at the element class in the object browser to find out about the different ways that we can access its information. Including its category name, family name, family symbol name and the instance name. In the object browser let's go ahead and search for element. Within the element class, we can quite easily get the category name by accessing the category property from the object. We can also get the instance name by simply accessing the name property from the element object. To get the family name and the family symbol name is a little bit trickier. To do that we'll need to retrieve the element type object that defines the instance, that is, the family symbol. To retrieve this, we'll need to call the 'get type ID' method from the element class. The get type ID method will return the element ID of the element type. So let's have a look at the element type class. Within this class from which the family symbol derives from, there are two properties; the name and the family name properties. The name property will return the name of the family symbol and the family name property will return the name of the family name. So let's jump back into our code and use these in our command. As you can probably tell I'm currently in the visual studio, project file that we ended from in the last video. So if you don't have this open you can find it in the exercise folder for this video. After line 31 where we retrieve the element, let's go ahead and retrieve the element type. To do that, let's create an element ID variable named E type ID. And we'll assign to this a code to the get type ID method from the element object. And this takes no parameters. Now we can use the get element method again from the document, although this time we'll use the element ID we just retrieved. And as we want the element type we'll need to cast it as a element type object. We can do this by using the AS keyword. The AS keyword is a safe way to cast as if it fails it won't raise an exception, it will just simply return null. As the element type derives from the element class, we can safely cast from the base class to the derive class of element type. So let's create and element type variable named eType and then use the it element method from the document with eType I'd as the parameter. And this has caused an error in the code because we need to cast it as element type. Perfect. So now we have a reference to both the element and the element type that was used to create the element. So let's retrieve some of the information from these objects to see all the different classifications. To do this let's simply re use the task dialogue that we created earlier. Let's rename it to element classification. And to start let's simply display the element ID by using the two string method from the element ID. Then, to add a new line to our dialogue, let's use the new line property from the environment class in the system names first. This is useful for working with strings and it basically adds a new line. To use this, let's use the add symbol and then access the environment class dot new line. We can use this class because the system names base is already referenced into our class. Then on the next line, let's extract the category from the element. First use the plus symbol, now we want to concatenate the string category so we know that we know what we're retrieving and colon space. And then we can simply get the category name by accessing the category property from the element and from this category element we can access its name. And let's add another new line. And next, let's display the instance name, we can do that by simply retrieving the name from the element. Next, let's retrieve the family symbol name. We can retrieve this by accessing the name property from the element type object. And finally let's get the family name by accessing the family name property from the element type object. Perfect. So let's check if this has worked by hitting the debug command. Now go ahead and start a new project and let's test the command on a section. Perfect. So it looks like it's worked as expected. You can see that we've got the element ID to start followed by the string category and then the category that it belongs to and then the instance name which is section one, the symbol name which is building section and the family name which is section. Using these classifications enables us to find and select different elements in the project file as well as specify which elements we want to create or manipulate. We'll be using these different classifications throughout the course. In areas such as filtering for elements.
+Kịch bản bài học: Truy xuất thông tin phần tử trong Revit
+Mục tiêu
+Chào mừng các bạn quay lại với khóa học lập trình plugin cho Revit! Trong bài học hôm nay, chúng ta sẽ cải tiến lệnh GetElementId để truy xuất và hiển thị thông tin chi tiết của một phần tử, bao gồm Category, Instance Name, Family Symbol Name, và Family Name. Sau bài học này, bạn sẽ biết:
+
+Cách sử dụng Object Browser để tìm thuộc tính và phương thức của lớp Element.
+Cách lấy Element Type bằng GetTypeId và truy xuất thông tin từ nó.
+Cách sử dụng TaskDialog để hiển thị nhiều thông tin phần tử.
+
+Hãy cùng bắt đầu!
+
+Phần 1: Khám phá lớp Element trong Object Browser
+Hướng dẫn viên (giọng điệu hào hứng):Trong bài trước, chúng ta đã lấy được đối tượng Element từ Element ID. Bây giờ, hãy khám phá lớp Element để tìm cách truy xuất thông tin chi tiết, như danh mục, tên instance, và thông tin về family.
+
+Bước 1: Mở Object Browser và tìm lớp ElementTrong Visual Studio, mở Object Browser bằng cách nhấp đúp vào tham chiếu RevitAPI trong Solution Explorer. Tìm lớp Element bằng cách nhập “Element” vào ô tìm kiếm. Trong lớp Element, bạn sẽ thấy:
+
+Category: Thuộc tính trả về danh mục của phần tử (ví dụ: Walls, Doors).  
+Name: Thuộc tính trả về tên instance của phần tử.  
+GetTypeId(): Phương thức trả về Element ID của Element Type (Family Symbol).
+
+Hành động trên màn hình:  
+
+Hiển thị Solution Explorer, nhấp đúp vào RevitAPI để mở Object Browser.  
+Nhập “Element” vào ô tìm kiếm, highlight lớp Element.  
+Zoom vào các thuộc tính Category, Name, và phương thức GetTypeId().  
+Chèn text: “Lớp Element: Chứa thông tin về Category, Name, và Type.”
+
+
+Bước 2: Tìm hiểu lớp ElementTypeTìm lớp ElementType trong Object Browser (vì Family Symbol kế thừa từ ElementType). Trong lớp ElementType, bạn sẽ thấy:
+
+Name: Thuộc tính trả về tên Family Symbol (ví dụ: “Brick Wall”).  
+FamilyName: Thuộc tính trả về tên Family (ví dụ: “Basic Wall”).
+
+Hành động trên màn hình:  
+
+Trong Object Browser, nhập “ElementType”, highlight lớp ElementType.  
+Zoom vào Name và FamilyName.  
+Chèn text: “ElementType: Chứa thông tin về Family Symbol và Family Name.”
+
+
+
+
+Phần 2: Cập nhật mã trong Visual Studio
+Hướng dẫn viên (giọng điệu rõ ràng):Hãy quay lại Visual Studio để cập nhật lệnh GetElementId. Chúng ta sẽ lấy Element Type và hiển thị thông tin chi tiết của phần tử trong TaskDialog.
+
+Bước 3: Mở tệp GetElementId.csMở tệp GetElementId.cs trong dự án MyRevitCommands. Tiếp tục từ mã của bài trước, nơi chúng ta đã lấy đối tượng Element. Nếu bạn chưa có mã này, hãy mở tệp từ thư mục bài tập của video.
+Hành động trên màn hình:  
+
+Hiển thị Solution Explorer, nhấp vào GetElementId.cs.  
+Zoom vào phương thức Execute, highlight dòng lấy Element:  Element ele = doc.GetElement(eleId);
+
+
+
+
+Bước 4: Lấy Element TypeSau dòng lấy Element, thêm mã để lấy Element Type bằng GetTypeId và GetElement. Sử dụng từ khóa as để ép kiểu an toàn:
+ElementId eTypeId = ele.GetTypeId();
+ElementType eType = doc.GetElement(eTypeId) as ElementType;
+
+
+GetTypeId(): Trả về Element ID của Element Type.  
+as ElementType: Ép kiểu an toàn, trả về null nếu không thành công, tránh ngoại lệ.
+
+Hành động trên màn hình:  
+
+Nhập các dòng ElementId eTypeId = ele.GetTypeId(); và ElementType eType = doc.GetElement(eTypeId) as ElementType;.  
+Highlight từ khóa as, giải thích bằng text: “as: Ép kiểu an toàn, trả về null nếu thất bại.”
+
+
+Bước 5: Cập nhật TaskDialog để hiển thị thông tinCập nhật TaskDialog để hiển thị Element ID, Category, Instance Name, Family Symbol Name, và Family Name. Sử dụng Environment.NewLine để xuống dòng. Thêm namespace System nếu chưa có. Mã hoàn chỉnh trong phương thức Execute sẽ như sau:
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.Attributes;
+using System; // Thêm namespace System cho Environment.NewLine
+
+namespace MyRevitCommands
+{
+    [Transaction(TransactionMode.ReadOnly)]
+    public class GetElementId : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            try
+            {
+                Reference pickedObj = uidoc.Selection.PickObject(ObjectType.Element);
+                if (pickedObj != null)
+                {
+                    Document doc = uidoc.Document;
+                    ElementId eleId = pickedObj.ElementId;
+                    Element ele = doc.GetElement(eleId);
+                    ElementId eTypeId = ele.GetTypeId();
+                    ElementType eType = doc.GetElement(eTypeId) as ElementType;
+
+                    string info = "Element ID: " + eleId.ToString() + Environment.NewLine +
+                                  "Category: " + ele.Category.Name + Environment.NewLine +
+                                  "Instance Name: " + ele.Name + Environment.NewLine +
+                                  "Symbol Name: " + (eType != null ? eType.Name : "N/A") + Environment.NewLine +
+                                  "Family Name: " + (eType != null ? eType.FamilyName : "N/A");
+
+                    TaskDialog.Show("Element Classification", info);
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+                return Result.Failed;
+            }
+            return Result.Succeeded;
+        }
+    }
+}
+
+
+Environment.NewLine: Thêm dòng mới giữa các thông tin.  
+eType != null ? ... : "N/A": Kiểm tra eType để tránh lỗi nếu không có Element Type.
+
+Hành động trên màn hình:  
+
+Thêm dòng using System; ở đầu tệp.  
+Cập nhật TaskDialog với chuỗi info, highlight Environment.NewLine và các thuộc tính như ele.Category.Name.  
+Chèn text: “TaskDialog: Hiển thị thông tin phân loại phần tử.”
+
+
+
+
+Phần 3: Kiểm tra lệnh trong Revit
+Hướng dẫn viên (giọng điệu khích lệ):Hãy kiểm tra xem lệnh của chúng ta có hoạt động như mong đợi không!
+
+Bước 6: Chạy Debug và kiểm traTrong Visual Studio, nhấn F5 để chạy debug mode. Mở Revit, tạo một dự án mới với Architectural Template. Chuyển đến tab Add-Ins > External Tools > Get Element ID, chọn một phần tử (ví dụ: một section). TaskDialog sẽ hiển thị:
+
+Element ID: ID của phần tử.
+Category: Danh mục (ví dụ: Sections).
+Instance Name: Tên instance (ví dụ: Section 1).
+Symbol Name: Tên Family Symbol (ví dụ: Building Section).
+Family Name: Tên Family (ví dụ: Section).
+
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, nhấn F5.  
+Trong Revit, tạo dự án mới, chạy lệnh Get Element ID, chọn một section.  
+Hiển thị TaskDialog với các thông tin như “Category: Sections”, “Instance Name: Section 1”.  
+Chèn text: “Kiểm tra: Hiển thị thông tin phân loại phần tử.”
+
+
+
+
+Phần 4: Kết luận và bước tiếp theo
+Hướng dẫn viên (giọng điệu truyền cảm hứng):Chúc mừng các bạn! Hôm nay, chúng ta đã:
+
+Khám phá lớp Element và ElementType trong Object Browser.  
+Cập nhật lệnh GetElementId để hiển thị Category, Instance Name, Family Symbol Name, và Family Name.  
+Kiểm tra lệnh trong Revit để xác nhận thông tin phân loại phần tử.
+
+Những cách phân loại này rất quan trọng khi lọc, tìm kiếm, hoặc thao tác với phần tử trong Revit API. Trong bài học tiếp theo, chúng ta sẽ tìm hiểu cách lọc phần tử dựa trên các phân loại này, như tìm tất cả các tường trong dự án.
+Bước 7: Kêu gọi hành độngHãy thử chạy lệnh với các phần tử khác (như tường, cửa) và kiểm tra thông tin trong TaskDialog. Thêm breakpoint để xem giá trị của eType hoặc ele.Category. Nếu bạn gặp vấn đề, hãy để lại câu hỏi trong phần bình luận, mình sẽ hỗ trợ ngay!
+Cảm ơn các bạn đã theo dõi! Hẹn gặp lại ở bài học tiếp theo!
+Hành động trên màn hình:  
+
+Hiển thị màn hình kết thúc với text:  
+"Bài học tiếp theo: Lọc phần tử theo phân loại."  
+"Gặp vấn đề? Để lại câu hỏi trong phần bình luận!"
+
+
+Chèn logo khóa học hoặc hình ảnh minh họa Revit/Visual Studio, mô phỏng TaskDialog hiển thị thông tin.
+
