@@ -19,7 +19,7 @@ Chào mừng các bạn quay lại với khóa học lập trình plugin cho Rev
 
 Để tạo một plugin Revit, chúng ta cần tạo một **lệnh bên ngoài (external command)**. Đây là các đối tượng sử dụng giao diện `IExternalCommand` để tương tác với cơ sở dữ liệu Revit và các phần tử được chọn. Hãy cùng tìm hiểu nó là gì!
 
-### 🔹 Bước 1: Hiểu về `IExternalCommand`
+###  Bước 1: Hiểu về `IExternalCommand`
 
 Trong C#, một `interface` giống như một hợp đồng, chứa các phương thức và thuộc tính mà một lớp phải triển khai. `IExternalCommand` là một interface đặc biệt trong Revit API, giúp tạo các lệnh hiển thị trong tab **Add-Ins** của Revit.
 
@@ -30,7 +30,7 @@ Trong C#, một `interface` giống như một hợp đồng, chứa các phươ
 * Hiển thị giao diện Revit, zoom vào tab **Add-Ins**.
 * Chèn text: *“IExternalCommand: Tạo lệnh tùy chỉnh cho Revit.”*
 
-### 🔹 Bước 2: Phương thức `Execute`
+###  Bước 2: Phương thức `Execute`
 
 `IExternalCommand` có một phương thức quan trọng: `Execute`. Đây là phương thức được gọi khi bạn nhấn vào lệnh trong Revit.
 
@@ -52,7 +52,7 @@ Hiển thị sơ đồ đơn giản:
 
 Phương thức `Execute` cần ba tham số để hoạt động trong Revit. Revit tự động cung cấp các tham số này khi lệnh được chạy. Hãy cùng xem chúng là gì!
 
-### 🔹 Bước 3: Tham số 1 – `ExternalCommandData`
+###  Bước 3: Tham số 1 – `ExternalCommandData`
 
 Chứa tham chiếu đến ứng dụng Revit và chế độ xem hiện tại. Qua đối tượng này, chúng ta có thể truy cập toàn bộ dữ liệu Revit.
 
@@ -62,7 +62,7 @@ ExternalCommandData commandData;
 
 >  *ExternalCommandData: Cửa ngõ vào dữ liệu Revit.*
 
-### 🔹 Bước 4: Tham số 2 – `string` (Message)
+###  Bước 4: Tham số 2 – `string` (Message)
 
 Chuỗi dùng để gửi thông báo nếu lệnh thất bại hoặc bị hủy.
 
@@ -72,7 +72,7 @@ string message = "Lệnh đã bị hủy!";
 
 >  *String: Gửi thông báo khi lệnh thất bại hoặc bị hủy.*
 
-### 🔹 Bước 5: Tham số 3 – `ElementSet`
+###  Bước 5: Tham số 3 – `ElementSet`
 
 Ban đầu rỗng, dùng để chứa các phần tử bạn muốn highlight nếu lệnh thất bại.
 
@@ -82,7 +82,7 @@ ElementSet elements = new ElementSet();
 
 >  *ElementSet: Highlight các phần tử khi lệnh thất bại.*
 
-### 🔹 Bước 6: Giá trị trả về của `Execute`
+###  Bước 6: Giá trị trả về của `Execute`
 
 Phương thức `Execute` phải trả về một trong ba giá trị kiểu `Result`:
 
@@ -94,7 +94,7 @@ Phương thức `Execute` phải trả về một trong ba giá trị kiểu `Re
 return Result.Succeeded;
 ```
 
-> 📌 *Result: Báo cho Revit trạng thái của lệnh.*
+>  *Result: Báo cho Revit trạng thái của lệnh.*
 
 ---
 
@@ -174,4 +174,4 @@ Hiển thị màn hình kết thúc với text:
 
 > *Chèn logo khóa học hoặc hình ảnh minh họa Revit/Visual Studio.*
 
----
+
