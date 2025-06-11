@@ -1,4 +1,208 @@
-kịch bản video hướng dẫn từng bước — trình bày dạng video tutorial có thoại, từng bước rõ ràng, kết hợp phần hình ảnh minh họa , với nội dung sau: 
-2-11-
-Get parameter
-- [Instructor] When working in Revit, we can adjust different parameters of an element to change different characteristics. Using the Revit API, we can do the same thing, accessing and editing an element's parameters directly from our commands. In this video, let's have a look at getting parameters. First, though, let's have a look at what parameters actually are. Parameters come in the form of parameter objects. Each object can be retrieved and set from an element with the API, as we can with the user interface. Each parameter object has a definition property that returns a definition object describing the parameter name and type. For instance, say a door had a parameter named Head Height. The definition will store its name, Head Height, and the type of unit it contains, length in this example. Each parameter also has a value, which is either an integer, double, string, element ID, or none. These values are what we actually see in the interface. All objects that we work with in Revit that inherit from the element class can have parameters associated with them. We can retrieve parameters in several different ways. Some of these are by accessing the Parameters method from an element. This will get all the parameters associated with an element. We can also use the GetOrderedParameters method. This means it'll get all the parameters that we can see associated with an element in the user interface. We can use the Parameter and LookupParameter method, which can be used to get a single element from an element by using a string or built-in parameter. And we can also use the GetParameters method. This is used to get all parameters of a single name, as elements can sometimes have more than one parameter with the same string name. This is because project parameters can be bound to an element category, even if an element has a built-in parameter of the same name. For example, say we had a project parameter, called Height, attached to the door category. Doors would therefore have more than one parameter named Height. One that is project set and one that is inherently built into the doors. The best way to deal with this is to use built-in parameters. In Visual Studio, I've currently got the exercise file open for this video. In this file I've gone ahead and created the GetParameters class, which is a new external command. We can use this to get parameters. This is similar to the GetElement ID command, in that it will allow us to select an element and then retrieve that element. The difference here, is I put the element retrieval inside of the if statement to make it a little bit safer. So let's use this to get the Head Height parameter of a window. And then we'll then display some of its information. To do that, let's start by creating a parameter variable named param. And then we'll assigned to this a call to the LookupParameter method from the element that's been retrieved. For the parameter, let's use the name of the parameter. In this case, it will be Head Height, making sure to capitalize both words, as this is case sensitive. Now we have the parameter from the element, we can start accessing its properties. Let's start by looking at the definition that stores information about the parameter type. This can be retrieved from the definition property of the parameter. And it can be either an internal or external definition. Every parameter has an internal definition, whereas they may not have an external parameter definition, which are those that are saved into a shared parameter file. So let's create an internal definition variable named paramDef. And we'll assign to this the definition property from the parameter, as internal definition, so we're casting it to an internal definition type. Now that we have the parameter and the internal definition, let's retrieve some of the information from them, such as its name, unit type, and built-in parameter enumeration. On a new line, let's create a task dialogue, and call the Show method, which will display some of the information. Let's call it Parameters for the title and, to show each of the values, let's use a string format. And the first argument, let's show the parameter name. The second argument, will be the parameter type. And the third, will be the built-in parameter. We can then access each of these properties from the definition. So paramDef.Name, paramDef.UnitType and paramDef.BuiltInParameter. A built-in parameter is an enumeration like a built-in category. All native parameters, that is non-user-defined parameters, have a built-in parameter associated with them. I've already gone ahead and added this command into the manifest. So let's give it a try by hitting the debug button. And then open up the Revit exercise file for this video. And let's go ahead and try our new command, GetParameter. Then select a window. Perfect. So you can see it's the Head Height parameter of type UT Length with a built-in parameter, Instance Head Height Param. And as we can see on the window, here's the parameter. Keep in mind here that if we use this command on a non-window, that is one that does not have this parameter, it may cause an error. This is something to keep in mind, when making your commands safe.
+Kịch bản bài học: Lấy thông số phần tử trong Revit
+Mục tiêu
+Chào mừng các bạn quay lại với khóa học lập trình plugin cho Revit! Trong bài học hôm nay, chúng ta sẽ học cách lấy thông số (parameter) của một phần tử trong Revit, cụ thể là thông số Head Height của một cửa sổ. Sau bài học này, bạn sẽ biết:
+
+Parameter là gì và các loại giá trị của chúng.
+Các phương thức để lấy thông số, như LookupParameter và GetOrderedParameters.
+Cách hiển thị thông tin thông số (name, unit type, built-in parameter) bằng TaskDialog.
+
+Hãy cùng bắt đầu!
+
+Phần 1: Tìm hiểu về Parameter trong Revit API
+Hướng dẫn viên (giọng điệu hào hứng):Trong Revit, thông số (parameters) cho phép chúng ta điều chỉnh các đặc điểm của phần tử, như chiều cao đầu cửa sổ. Với Revit API, chúng ta có thể truy xuất và chỉnh sửa thông số trực tiếp. Hãy cùng tìm hiểu cách hoạt động của chúng!
+
+Bước 1: Hiểu về Parameter ObjectMỗi Parameter là một đối tượng chứa thông tin về một đặc tính của phần tử, bao gồm:
+
+Definition: Mô tả tên (ví dụ: “Head Height”) và loại đơn vị (ví dụ: length).
+Value: Giá trị của thông số, có thể là int, double, string, ElementId, hoặc none.
+
+Tất cả các phần tử kế thừa từ lớp Element (như cửa, tường) đều có thể có thông số.
+Hành động trên màn hình:  
+
+Hiển thị sơ đồ đơn giản:  Parameter
+├── Definition: Tên, Loại đơn vị
+└── Value: int, double, ElementId, string, none
+
+
+Chèn text: “Parameter: Đặc tính của phần tử trong Revit.”
+
+
+Bước 2: Các phương thức lấy ParameterCó nhiều cách để lấy thông số từ phần tử:
+
+Parameters: Lấy tất cả thông số của phần tử.
+GetOrderedParameters: Lấy tất cả thông số theo thứ tự thấy trong giao diện Revit.
+LookupParameter(string name): Lấy một thông số bằng tên (case-sensitive).
+GetParameters(string name): Lấy danh sách các thông số có cùng tên (trường hợp project parameter trùng tên built-in parameter).
+
+Để tránh nhầm lẫn khi có nhiều thông số cùng tên, nên sử dụng BuiltInParameter (một enumeration xác định thông số gốc của Revit).
+Hành động trên màn hình:  
+
+Hiển thị mã giả lập:  Parameter param = element.LookupParameter("Head Height");
+IList<Parameter> params = element.GetParameters("Height");
+
+
+Chèn text: “Phương thức: Lấy Parameter từ Element.”
+
+
+
+
+Phần 2: Tạo lệnh GetParameter trong Visual Studio
+Hướng dẫn viên (giọng điệu rõ ràng):Hãy mở Visual Studio để tạo lệnh GetParameter, cho phép chọn một cửa sổ và lấy thông số Head Height, sau đó hiển thị thông tin bằng TaskDialog.
+
+Bước 3: Mở tệp GetParameter.csMở tệp GetParameter.cs trong dự án MyRevitCommands. Mã cơ bản đã được chuẩn bị, tương tự lệnh GetElementId, nhưng việc lấy phần tử được đặt trong if để an toàn hơn:
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.Attributes;
+
+namespace MyRevitCommands
+{
+    [Transaction(TransactionMode.ReadOnly)]
+    public class GetParameter : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            Document doc = uidoc.Document;
+
+            try
+            {
+                Reference pickedObj = uidoc.Selection.PickObject(ObjectType.Element);
+                if (pickedObj != null)
+                {
+                    Element element = doc.GetElement(pickedObj);
+                    // Lấy Parameter tại đây
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+                return Result.Failed;
+            }
+
+            return Result.Succeeded;
+        }
+    }
+}
+
+Hành động trên màn hình:  
+
+Hiển thị Solution Explorer, nhấp vào GetParameter.cs.  
+Zoom vào khối if (pickedObj != null), highlight doc.GetElement(pickedObj).  
+Chèn text: “GetParameter: Điểm bắt đầu để lấy Head Height.”
+
+
+Bước 4: Lấy Parameter Head HeightTrong khối if, thêm mã để lấy thông số Head Height bằng LookupParameter:
+Parameter param = element.LookupParameter("Head Height");
+
+Lưu ý: Tên thông số phân biệt chữ hoa/thường, phải viết đúng “Head Height”.
+Hành động trên màn hình:  
+
+Nhập dòng LookupParameter, highlight "Head Height".  
+Chèn text: “LookupParameter: Lấy thông số Head Height.”
+
+
+Bước 5: Lấy InternalDefinitionLấy thông tin từ Definition của thông số bằng cách ép kiểu sang InternalDefinition:
+InternalDefinition paramDef = param.Definition as InternalDefinition;
+
+Mọi Parameter đều có InternalDefinition, nhưng không phải lúc nào cũng có ExternalDefinition (dành cho shared parameters).
+Hành động trên màn hình:  
+
+Nhập dòng InternalDefinition, highlight param.Definition as InternalDefinition.  
+Chèn text: “InternalDefinition: Lấy thông tin tên và loại đơn vị.”
+
+
+Bước 6: Hiển thị thông tin bằng TaskDialogSử dụng TaskDialog để hiển thị tên, loại đơn vị, và BuiltInParameter của thông số:
+TaskDialog.Show("Parameters", string.Format("Parameter Name: {0}\nParameter Type: {1}\nBuiltInParameter: {2}",
+    paramDef.Name, paramDef.UnitType, paramDef.BuiltInParameter));
+
+
+paramDef.Name: Tên thông số (Head Height).
+paramDef.UnitType: Loại đơn vị (UT_Length).
+paramDef.BuiltInParameter: Enumeration của thông số gốc (INSTANCE_HEAD_HEIGHT_PARAM).
+
+Mã hoàn chỉnh trong phương thức Execute:
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.Attributes;
+
+namespace MyRevitCommands
+{
+    [Transaction(TransactionMode.ReadOnly)]
+    public class GetParameter : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            Document doc = uidoc.Document;
+
+            try
+            {
+                Reference pickedObj = uidoc.Selection.PickObject(ObjectType.Element);
+                if (pickedObj != null)
+                {
+                    Element element = doc.GetElement(pickedObj);
+                    Parameter param = element.LookupParameter("Head Height");
+                    InternalDefinition paramDef = param.Definition as InternalDefinition;
+
+                    TaskDialog.Show("Parameters", string.Format("Parameter Name: {0}\nParameter Type: {1}\nBuiltInParameter: {2}",
+                        paramDef.Name, paramDef.UnitType, paramDef.BuiltInParameter));
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+                return Result.Failed;
+            }
+
+            return Result.Succeeded;
+        }
+    }
+}
+
+Hành động trên màn hình:  
+
+Nhập mã TaskDialog, highlight string.Format và các thuộc tính Name, UnitType, BuiltInParameter.  
+Chèn text: “TaskDialog: Hiển thị thông tin Parameter.”
+
+
+
+
+Phần 3: Đăng ký và kiểm tra lệnh
+Hướng dẫn viên (giọng điệu khích lệ):Lệnh GetParameter đã được thêm vào tệp manifest với tên “GetParameter”. Hãy kiểm tra nó trong Revit!
+
+Bước 7: Chạy Debug và kiểm traTrong Visual Studio, nhấn F5 để chạy debug mode. Mở Revit, mở tệp bài tập của video này. Chạy Add-Ins > External Tools > GetParameter, chọn một cửa sổ. TaskDialog sẽ hiển thị thông tin:
+
+Parameter Name: Head Height
+Parameter Type: UT_Length
+BuiltInParameter: INSTANCE_HEAD_HEIGHT_PARAM
+
+Lưu ý: Nếu chọn phần tử không phải cửa sổ (không có thông số Head Height), lệnh có thể gây lỗi. Để an toàn, có thể thêm kiểm tra if (param != null).
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, nhấn F5.  
+Trong Revit, mở tệp bài tập, chạy GetParameter, chọn một cửa sổ.  
+Hiển thị TaskDialog với thông tin thông số, zoom vào Properties của cửa sổ để so sánh Head Height.  
+Chèn text: “Kiểm tra: Lấy thông số Head Height của cửa sổ.”
+
+
+
+
+Phần 4: Kết luận và bước tiếp theo
+Hướng dẫn viên (giọng điệu truyền cảm hứng):Chúc mừng các bạn! Hôm nay, chúng ta đã:
+
+Tìm hiểu về Parameter và các phương thức lấy thông số như LookupParameter.  
+Lấy thông số Head Height của cửa sổ và hiển thị thông tin bằng TaskDialog.  
+Hiểu cách sử dụng InternalDefinition và BuiltInParameter.
+
+Trong bài học tiếp theo, chúng ta sẽ học cách chỉnh sửa giá trị thông số để thay đổi đặc tính của phần tử.
+Bước 8: Kêu gọi hành độngHãy thử thay đổi lệnh để lấy thông số khác, như “Width” của cửa sổ, hoặc thêm kiểm tra if (param != null) để tránh lỗi khi chọn phần tử không có thông số. Nếu bạn gặp vấn đề, hãy để lại câu hỏi trong phần bình luận, mình sẽ hỗ trợ ngay!
+Cảm ơn các bạn đã theo dõi! Hẹn gặp lại ở bài học tiếp theo!
+Hành động trên màn hình:  
+
+Hiển thị màn hình kết thúc với text:  
+"Bài học tiếp theo: Chỉnh sửa Parameter trong Revit."  
+"Gặp vấn đề? Để lại câu hỏi trong phần bình luận!"
+
+
+Chèn logo khóa học hoặc hình ảnh minh họa Revit/Visual Studio, mô phỏng TaskDialog hiển thị thông số.
+

@@ -1,4 +1,212 @@
-kịch bản video hướng dẫn từng bước — trình bày dạng video tutorial có thoại, từng bước rõ ràng, kết hợp phần hình ảnh minh họa , với nội dung sau: 
-2-7-
-Creating families
-- [Instructor] We have now learned how to make changes to the Revit model, so let's have a look at creating elements from scratch starting with placing a point based family. I've currently got the Revit exercise file open for this video. This exercise will be placing a single furniture desk family as shown here in the top left, to do that we are going to filter all FamilySymbols or types in the document and find this one by matching the name 1,525 by 762 milliliters, so let's jump in to Visual Studio and get started. I've currently got the Visual Studio project file open for this video and here I've gone ahead and created a place family class. Which is a new IExternalCommand called Place Family. We can use this to place a family. Before we get started with the command, let's take a look at how to create families by searching for new family instance which is the method used to create families in the Object Browser. You can see that this is an overloaded method and it provides many ways to create a family. Each used in specific circumstances and each taking different parameters. As we want to create a point based family, that is inserted by selecting a point, we need to use one that starts with XYZ for point this one should work well. It allows us to insert a new family with the parameters location as XYZ, symbol for family type and a structural type enumeration which is required when placing some families and helps distinguish between structural elements. You might notice that the methods are created from a couple different objects. The document, and the item factory base. The others here at the bottom are for batch creation through the application which we won't be using. The creation.document object is different from the Revit document that we have been using, however it does store access to it. If we go to the document class in DB, and then look at its create property. We can see this returns the creation.document object used to create families, so let's click on that and next to the name it shows that this document inherits from the item factory base. So it can retrieve this object to create families from the creation namespace. So let's jump back to our command class, and look for the FamilySymbol so we can place a new desk into the project. Let's start by getting the FamilySymbol, by creating a filtered element collector using the variable collector and filtering the document by using the doc parameter. As we will be retrieving elements, let's start with an Ilist of elements with the variable symbols and assign to this our collector and for the filters, let's use a new shortcut OfClass. This lets us filter for elements by their class as shown in the DB namespace, so we can filter for classes that derive from the element class, in our case the FamilySymbol class. To add that class as a parameter, we need to add it as a parameter in the typeof operator. This returns the type of the class, so let's add typeof and then this take a parameter, let's use FamilySymbol so this will return the type of class the FamilySymbol is. To speed things up let's filter for FamilySymbols that are just family types, not instances. So to do this let's add WhereElementIsElementType and to retrieve the elements, let's use the ToElements method. Next we need to find which of the retrieved elements is the family symbol of the desk we are looking for. To do that, let's loop through each one until we find one that matches the FamilySymbol name. So let's create a FamilySymbol variable name symbol and assign to it null. We will then assign the family we find to this variable, to do that let's use a foreach loop, looping over each element as ele in the symbols list of elements. Inside of the loop let's check if a name and category match the family type we're after. Using an if statement let's check if the element name is equal to 1,525 by 762 millimeters as a string. If this is true, let's assign the element to the symbol variable as a FamilySymbol using the as keyword, and then break the loop as we have found our element. Perfect, so we have now filtered the document for the FamilySymbol we want, let's go ahead and place the family, to do that I've gone ahead and created a try, accept statement wrapping a transaction named Place Family, this contains the start and commit methods as required. After the start method is where we can place the family. Before we place the family however, we need to ensure that it is active, we need to do this because Revit will deactivate FamilySymbols to conserve memory. So to activate it let's first check if it is active using an if statement, and we can do this by accessing the IsActive property from the FamilySymbol which returns a Boolean, and to check if it returns false let's add an exclamation mark before the Boolean to invert it. If this returns false, let's use the Activate method from the FamilySymbol object which will simply activate it with no parameters. Now with the FamilySymbol active let's place it. Let's access the document property from the document create property, then NewFamilyInstance, and if you recall the version we want is one that takes an XYZ, this is basically a point that we can create with three coordinates in space as three parameters, so let's add new XYZ at zero, zero, zero. And then for the second parameter we need the symbol, and the third was the structural type enumeration which can be found in DB.structure, in StructuralType and NonStructural, perfect. This will now create a family, I've already gone ahead and added this in to the add-in manifest so let's go head and debug the command, and then open up the Revit exercise file associated with this video, and then go ahead and run the new command Place Family. Perfect, there's our new desk at zero, zero, zero. Being able to automatically place families can be used if you want to place many point based families at once like a large array of columns for instance.
+Kịch bản bài học: Tạo Family Instance trong Revit
+Mục tiêu
+Chào mừng các bạn quay lại với khóa học lập trình plugin cho Revit! Trong bài học hôm nay, chúng ta sẽ học cách tạo một Family Instance từ đầu bằng cách đặt một bàn làm việc (desk) vào mô hình Revit. Sau bài học này, bạn sẽ biết:
+
+Cách sử dụng FilteredElementCollector để tìm FamilySymbol theo tên.
+Cách sử dụng phương thức NewFamilyInstance để tạo Family Instance dựa trên điểm.
+Cách kích hoạt FamilySymbol và quản lý Transaction để đặt phần tử.
+
+Hãy cùng bắt đầu!
+
+Phần 1: Tìm hiểu phương thức NewFamilyInstance
+Hướng dẫn viên (giọng điệu hào hứng):Chúng ta đã biết cách chỉnh sửa mô hình Revit với Transaction. Bây giờ, hãy học cách tạo một Family Instance, cụ thể là một bàn làm việc kích thước 1,525 x 762 mm, bằng cách sử dụng FilteredElementCollector để tìm FamilySymbol và NewFamilyInstance để đặt nó vào mô hình.
+
+Bước 1: Khám phá NewFamilyInstance trong Object BrowserTrong Visual Studio, mở Object Browser bằng cách nhấp đúp vào tham chiếu RevitAPI. Tìm “NewFamilyInstance” trong ô tìm kiếm. Bạn sẽ thấy nhiều phiên bản của phương thức này, mỗi phiên bản dùng cho các trường hợp khác nhau. Vì chúng ta muốn đặt một Family Instance dựa trên điểm (point-based), chọn phiên bản với các tham số:
+
+XYZ: Tọa độ điểm đặt (x, y, z).
+FamilySymbol: Loại Family (Family Type).
+StructuralType: Loại cấu trúc (ví dụ: NonStructural).
+
+Phương thức này có thể được gọi từ Document.Create (thuộc Creation.Document) hoặc ItemFactoryBase.
+Hành động trên màn hình:  
+
+Hiển thị Solution Explorer, nhấp đúp vào RevitAPI để mở Object Browser.  
+Nhập “NewFamilyInstance”, highlight phiên bản với tham số XYZ, FamilySymbol, StructuralType.  
+Zoom vào Document.Create trong lớp Document, highlight Creation.Document.  
+Chèn text: “NewFamilyInstance: Tạo Family Instance dựa trên điểm.”
+
+
+Bước 2: Hiểu Creation.DocumentTrong Object Browser, tìm lớp Document trong namespace Autodesk.Revit.DB. Thuộc tính Create trả về một đối tượng Creation.Document, kế thừa từ ItemFactoryBase, dùng để tạo các phần tử như Family Instance.
+Hành động trên màn hình:  
+
+Trong Object Browser, tìm “Document”, highlight thuộc tính Create.  
+Chèn text: “Creation.Document: Đối tượng để tạo Family Instance.”
+
+
+
+
+Phần 2: Tạo lệnh PlaceFamily trong Visual Studio
+Hướng dẫn viên (giọng điệu rõ ràng):Hãy mở Visual Studio để tạo lệnh PlaceFamily, tìm FamilySymbol của bàn làm việc và đặt nó vào tọa độ (0, 0, 0) trong mô hình Revit.
+
+Bước 3: Mở tệp PlaceFamily.csMở tệp PlaceFamily.cs trong dự án MyRevitCommands. Mã cơ bản đã được chuẩn bị như sau:
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.Attributes;
+
+namespace MyRevitCommands
+{
+    [Transaction(TransactionMode.Manual)]
+    public class PlaceFamily : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            Document doc = uidoc.Document;
+            return Result.Succeeded;
+        }
+    }
+}
+
+Hành động trên màn hình:  
+
+Hiển thị Solution Explorer, nhấp vào PlaceFamily.cs.  
+Zoom vào phương thức Execute, highlight UIDocument và Document.  
+Chèn text: “PlaceFamily: Điểm bắt đầu để đặt bàn làm việc.”
+
+
+Bước 4: Tìm FamilySymbol bằng FilteredElementCollectorThêm mã để sử dụng FilteredElementCollector tìm tất cả FamilySymbol và lọc ra bàn làm việc có tên “1,525 by 762 millimeters”:
+FilteredElementCollector collector = new FilteredElementCollector(doc);
+IList<Element> symbols = collector.OfClass(typeof(FamilySymbol)).WhereElementIsElementType().ToElements();
+
+FamilySymbol symbol = null;
+foreach (Element ele in symbols)
+{
+    if (ele.Name == "1,525 by 762 millimeters")
+    {
+        symbol = ele as FamilySymbol;
+        break;
+    }
+}
+
+
+OfClass(typeof(FamilySymbol)): Lọc các phần tử thuộc lớp FamilySymbol.  
+WhereElementIsElementType(): Chỉ lấy Family Types, không lấy Instances.  
+foreach: Duyệt danh sách để tìm FamilySymbol có tên khớp.
+
+Hành động trên màn hình:  
+
+Nhập mã FilteredElementCollector, highlight typeof(FamilySymbol) và WhereElementIsElementType().  
+Nhập vòng foreach, highlight điều kiện ele.Name == "1,525 by 762 millimeters".  
+Chèn text: “FilteredElementCollector: Tìm FamilySymbol của bàn làm việc.”
+
+
+Bước 5: Thêm Transaction và kiểm tra FamilySymbolThêm khối try-catch với Transaction để đặt Family Instance. Kiểm tra và kích hoạt FamilySymbol trước khi đặt:
+try
+{
+    using (Transaction trans = new Transaction(doc, "Place Family"))
+    {
+        trans.Start();
+        if (!symbol.IsActive)
+        {
+            symbol.Activate();
+        }
+        doc.Create.NewFamilyInstance(new XYZ(0, 0, 0), symbol, StructuralType.NonStructural);
+        trans.Commit();
+    }
+}
+catch (Exception e)
+{
+    message = e.Message;
+    return Result.Failed;
+}
+
+
+!symbol.IsActive: Kiểm tra xem FamilySymbol có đang hoạt động không. Revit có thể tắt FamilySymbol để tiết kiệm bộ nhớ.  
+symbol.Activate(): Kích hoạt FamilySymbol nếu cần.  
+NewFamilyInstance: Đặt bàn làm việc tại tọa độ (0, 0, 0) với NonStructural.
+
+Mã hoàn chỉnh trong phương thức Execute:
+using Autodesk.Revit.DB;
+using Autodesk.Revit.UI;
+using Autodesk.Revit.Attributes;
+using System.Collections.Generic;
+
+namespace MyRevitCommands
+{
+    [Transaction(TransactionMode.Manual)]
+    public class PlaceFamily : IExternalCommand
+    {
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
+            UIDocument uidoc = commandData.Application.ActiveUIDocument;
+            Document doc = uidoc.Document;
+
+            FilteredElementCollector collector = new FilteredElementCollector(doc);
+            IList<Element> symbols = collector.OfClass(typeof(FamilySymbol)).WhereElementIsElementType().ToElements();
+
+            FamilySymbol symbol = null;
+            foreach (Element ele in symbols)
+            {
+                if (ele.Name == "1,525 by 762 millimeters")
+                {
+                    symbol = ele as FamilySymbol;
+                    break;
+                }
+            }
+
+            try
+            {
+                using (Transaction trans = new Transaction(doc, "Place Family"))
+                {
+                    trans.Start();
+                    if (!symbol.IsActive)
+                    {
+                        symbol.Activate();
+                    }
+                    doc.Create.NewFamilyInstance(new XYZ(0, 0, 0), symbol, StructuralType.NonStructural);
+                    trans.Commit();
+                }
+            }
+            catch (Exception e)
+            {
+                message = e.Message;
+                return Result.Failed;
+            }
+
+            return Result.Succeeded;
+        }
+    }
+}
+
+Hành động trên màn hình:  
+
+Nhập khối try-catch và Transaction, highlight !symbol.IsActive và symbol.Activate().  
+Nhập NewFamilyInstance, highlight new XYZ(0, 0, 0) và StructuralType.NonStructural.  
+Chèn text: “Transaction: Đặt Family Instance với FamilySymbol đã kích hoạt.”
+
+
+
+
+Phần 3: Đăng ký và kiểm tra lệnh
+Hướng dẫn viên (giọng điệu khích lệ):Lệnh PlaceFamily đã được thêm vào tệp manifest với tên “Place Family”. Hãy kiểm tra nó trong Revit!
+
+Bước 6: Kiểm tra trong RevitTrong Visual Studio, nhấn F5 để chạy debug mode. Mở Revit, mở tệp bài tập của video này. Chuyển đến Add-Ins > External Tools > Place Family. Một bàn làm việc kích thước 1,525 x 762 mm sẽ được đặt tại tọa độ (0, 0, 0) trong mô hình.
+Hành động trên màn hình:  
+
+Hiển thị Visual Studio, nhấn F5.  
+Trong Revit, mở tệp bài tập, chạy Place Family.  
+Zoom vào bàn làm việc tại (0, 0, 0), highlight trong viewport.  
+Chèn text: “Kiểm tra: Đặt bàn làm việc tại (0, 0, 0).”
+
+
+
+
+Phần 4: Kết luận và bước tiếp theo
+Hướng dẫn viên (giọng điệu truyền cảm hứng):Chúc mừng các bạn! Hôm nay, chúng ta đã:
+
+Tìm FamilySymbol bằng FilteredElementCollector và kiểm tra tên.  
+Sử dụng NewFamilyInstance để đặt một bàn làm việc tại tọa độ (0, 0, 0).  
+Quản lý Transaction và kích hoạt FamilySymbol để tạo Family Instance.
+
+Kỹ thuật này rất hữu ích khi bạn muốn tự động đặt nhiều Family Instance, như một dãy cột hoặc đồ nội thất. Trong bài học tiếp theo, chúng ta sẽ khám phá cách đặt các Family Instance khác hoặc tùy chỉnh vị trí.
+Bước 7: Kêu gọi hành độngHãy thử thay đổi tọa độ trong new XYZ(0, 0, 0) để đặt bàn làm việc ở vị trí khác. Hoặc thử tìm một FamilySymbol khác, như ghế, bằng cách thay tên trong vòng foreach. Nếu bạn gặp vấn đề, hãy để lại câu hỏi trong phần bình luận, mình sẽ hỗ trợ ngay!
+Cảm ơn các bạn đã theo dõi! Hẹn gặp lại ở bài học tiếp theo!
+Hành động trên màn hình:  
+
+Hiển thị màn hình kết thúc với text:  
+"Bài học tiếp theo: Đặt Family Instance nâng cao."  
+"Gặp vấn đề? Để lại câu hỏi trong phần bình luận!"
+
+
+Chèn logo khóa học hoặc hình ảnh minh họa Revit/Visual Studio, mô phỏng bàn làm việc trong mô hình.
+
