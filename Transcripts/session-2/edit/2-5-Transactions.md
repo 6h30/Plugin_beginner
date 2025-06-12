@@ -1,5 +1,3 @@
-Here's your content in Markdown format, with the original content preserved:
-
 ---
 ## Kịch bản bài học: Sử dụng Transaction để chỉnh sửa mô hình Revit
 ---
